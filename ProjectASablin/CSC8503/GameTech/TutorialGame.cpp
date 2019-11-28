@@ -504,18 +504,19 @@ void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing
 	float sphereRadius = 1.0f;
 	Vector3 cubeDims = Vector3(1, 1, 1);
 
-	for (int x = 0; x < numCols; ++x) {
-		for (int z = 0; z < numRows; ++z) {
-			Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
+	//for (int x = 0; x < numCols; ++x) {
+	//	for (int z = 0; z < numRows; ++z) {
+	//		Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
 
-			if (rand() % 2) {
-				AddCubeToWorld(position, cubeDims);
-			}
-			else {
-				AddSphereToWorld(position, sphereRadius);
-			}
-		}
-	}
+	//		if (rand() % 2) {
+	//			AddCubeToWorld(position, cubeDims);
+	//		}
+	//		else {
+	//			AddSphereToWorld(position, sphereRadius);
+	//		}
+	//	}
+	//}
+	AddCubeToWorld(Vector3(0,0,0), Vector3(1, 1, 1));
 	AddFloorToWorld(Vector3(0, -2, 0));
 }
 
