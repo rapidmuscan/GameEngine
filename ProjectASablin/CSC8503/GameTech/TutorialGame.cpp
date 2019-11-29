@@ -285,7 +285,30 @@ line - after the third, they'll be able to twist under torque aswell.
 */
 
 void TutorialGame::MoveSelectedObject() {
-
+	renderer -> DrawString(" Click Force :" + std::to_string(forceMagnitude),
+		 Vector2(10, 20)); // Draw debug text at 10 ,20
+	 forceMagnitude += Window::GetMouse() -> GetWheelMovement() * 100.0f;
+	
+		 if (!selectionObject) {
+		 return;// we haven ’t selected anything !
+		
+	}
+	 // Push the selected object !
+		 if (Window::GetMouse() -> ButtonPressed(NCL::MouseButtons::RIGHT)) {
+		 Ray ray = CollisionDetection::BuildRayFromMouse(
+			 * world -> GetMainCamera());
+		
+			 RayCollision closestCollision;
+		 if (world -> Raycast(ray, closestCollision, true)) {
+			 if (closestCollision.node == selectionObject) {
+				 selectionObject -> GetPhysicsObject() ->
+					 AddForce(ray.GetDirection() * forceMagnitude);
+				
+			}
+			
+		}
+		
+	}
 }
 
 void TutorialGame::InitCamera() {
@@ -504,19 +527,19 @@ void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing
 	float sphereRadius = 1.0f;
 	Vector3 cubeDims = Vector3(1, 1, 1);
 
-	//for (int x = 0; x < numCols; ++x) {
-	//	for (int z = 0; z < numRows; ++z) {
-	//		Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
+	for (int x = 0; x < numCols; ++x) {
+		for (int z = 0; z < numRows; ++z) {
+			Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
 
-	//		if (rand() % 2) {
-	//			AddCubeToWorld(position, cubeDims);
-	//		}
-	//		else {
-	//			AddSphereToWorld(position, sphereRadius);
-	//		}
-	//	}
-	//}
-	AddCubeToWorld(Vector3(0,0,0), Vector3(1, 1, 1));
+			if (rand() % 2) {
+				AddCubeToWorld(position, cubeDims);
+			}
+			else {
+				AddSphereToWorld(position, sphereRadius);
+			}
+		}
+	}
+	
 	AddFloorToWorld(Vector3(0, -2, 0));
 }
 
