@@ -285,29 +285,27 @@ line - after the third, they'll be able to twist under torque aswell.
 */
 
 void TutorialGame::MoveSelectedObject() {
-	renderer -> DrawString(" Click Force :" + std::to_string(forceMagnitude),
-		 Vector2(10, 20)); // Draw debug text at 10 ,20
-	 forceMagnitude += Window::GetMouse() -> GetWheelMovement() * 100.0f;
-	
-		 if (!selectionObject) {
-		 return;// we haven ’t selected anything !
-		
+	renderer->DrawString(" Click Force :" + std::to_string(forceMagnitude),
+		Vector2(10, 20)); // Draw debug text at 10 ,20
+	forceMagnitude += Window::GetMouse()->GetWheelMovement() * 100.0f;
+
+	if (!selectionObject) {
+		return;// we haven ’t selected anything !
+
 	}
-	 // Push the selected object !
-		 if (Window::GetMouse() -> ButtonPressed(NCL::MouseButtons::RIGHT)) {
-		 Ray ray = CollisionDetection::BuildRayFromMouse(
-			 * world -> GetMainCamera());
-		
-			 RayCollision closestCollision;
-		 if (world -> Raycast(ray, closestCollision, true)) {
-			 if (closestCollision.node == selectionObject) {
-				 selectionObject -> GetPhysicsObject() ->
-					 AddForce(ray.GetDirection() * forceMagnitude);
-				
+	// Push the selected object !
+	if (Window::GetMouse()->ButtonPressed(NCL::MouseButtons::RIGHT)) {
+		Ray ray = CollisionDetection::BuildRayFromMouse(
+			*world->GetMainCamera());
+
+		RayCollision closestCollision;
+		if (world->Raycast(ray, closestCollision, true)) {
+			if (closestCollision.node == selectionObject) {
+				selectionObject->GetPhysicsObject() -> AddForceAtPosition( ray.GetDirection() * forceMagnitude, closestCollision.collidedAt);
 			}
-			
+
 		}
-		
+
 	}
 }
 
@@ -389,7 +387,7 @@ GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius
 }
 
 GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass) {
-	GameObject* cube = new GameObject();
+	GameObject* cube = new GameObject("", 1);
 
 	AABBVolume* volume = new AABBVolume(dimensions);
 
