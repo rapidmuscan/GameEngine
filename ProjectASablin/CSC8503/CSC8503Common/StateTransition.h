@@ -10,13 +10,9 @@ namespace NCL {
 		public:
 			virtual bool CanTransition() const = 0;
 
-			State* GetDestinationState()  const {
-				return destinationState;
-			}
+			State* GetDestinationState()  const {return destinationState;}
 
-			State* GetSourceState() const {
-				return sourceState;
-			}
+			State* GetSourceState() const {	return sourceState;	}
 
 		protected:
 			State * sourceState;

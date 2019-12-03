@@ -13,7 +13,7 @@ namespace NCL {
 
 		class StateMachine	{
 		public:
-			StateMachine();
+			StateMachine(); 
 			~StateMachine();
 
 			void AddState(State* s);
