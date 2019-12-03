@@ -28,7 +28,9 @@ namespace NCL {
 				this->direction = direction;
 			}
 			~Ray(void) {}
-
+			int GetLayer() {
+				return Layer;
+			}
 			Vector3 GetPosition() const {return position;}
 
 			Vector3 GetDirection() const {return direction;	}
@@ -36,6 +38,7 @@ namespace NCL {
 		protected:
 			Vector3 position;	//World space position
 			Vector3 direction;	//Normalised world space direction
+			int Layer = 0;
 		};
 	}
 }

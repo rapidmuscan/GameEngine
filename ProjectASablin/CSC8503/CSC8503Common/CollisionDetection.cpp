@@ -172,7 +172,8 @@ bool CollisionDetection::ObjectIntersection(GameObject* a, GameObject* b, Collis
 		return AABBSphereIntersection((AABBVolume&)* volB, transformB, (SphereVolume&)* volA, transformA, collisionInfo);
 	}
 
-
+
+
 	return false;
 }
 
@@ -241,7 +242,8 @@ bool CollisionDetection::AABBIntersection(const AABBVolume& volumeA, const Trans
 		 return true;
 		
 	}
-	 return false;
+	 return false;
+
 }
 
 //Sphere / Sphere Collision
