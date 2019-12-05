@@ -4,8 +4,9 @@
 #include "../../Plugins/OpenGLRendering/OGLShader.h"
 #include "../../Plugins/OpenGLRendering/OGLTexture.h"
 #include "../../Common/TextureLoader.h"
-
+#include "../../Common/Assets.h"
 #include "../CSC8503Common/PositionConstraint.h"
+#include <fstream>
 
 using namespace NCL;
 using namespace CSC8503;
@@ -84,7 +85,7 @@ void TutorialGame::UpdateGame(float dt) {
 
 	SelectObject();
 	MoveSelectedObject();
-
+	MoveGoose();
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
 	physics->Update(dt);
@@ -130,6 +131,29 @@ void TutorialGame::UpdateKeys() {
 	}
 	else {
 		DebugObjectMovement();
+	}
+}
+
+void TutorialGame::Initworldobjects(const std::string& filename) {
+	std::ifstream infile(Assets::DATADIR + filename);
+
+	infile >> nodeSize;
+	infile >> gridWidth;
+	infile >> gridHeight;
+
+
+	for (int y = 0; y < gridHeight; ++y) {
+		for (int x = 0; x < gridWidth; ++x) {
+			
+			char type = 0;
+			infile >> type;
+			
+			if (type == 'X') {
+
+				AddCubeToWorld(position, cubeDims);
+			}
+
+		}
 	}
 }
 
@@ -218,7 +242,6 @@ void TutorialGame::DebugObjectMovement() {
 		}
 	}
 }
-
 /*
 
 Every frame, this code will let you perform a raycast, to see if there's an object
@@ -229,7 +252,9 @@ letting you move the camera around.
 */
 bool TutorialGame::SelectObject() {
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::Q)) {
+
 		inSelectionMode = !inSelectionMode;
+		
 		if (inSelectionMode) {
 			Window::GetWindow()->ShowOSPointer(true);
 			Window::GetWindow()->LockMouseToWindow(false);
@@ -301,7 +326,7 @@ void TutorialGame::MoveSelectedObject() {
 		RayCollision closestCollision;
 		if (world->Raycast(ray, closestCollision, true)) {
 			if (closestCollision.node == selectionObject) {
-				selectionObject->GetPhysicsObject() -> AddForceAtPosition( ray.GetDirection() * forceMagnitude, closestCollision.collidedAt);
+				selectionObject->GetPhysicsObject()->AddForceAtPosition(ray.GetDirection() * forceMagnitude, closestCollision.collidedAt);
 			}
 
 		}

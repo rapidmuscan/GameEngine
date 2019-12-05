@@ -1,1 +1,35 @@
-﻿  GameTech.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\GameTech.exe
+﻿  Main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\Main.cpp: note: see previous definition of '_WINSOCKAPI_'
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\Main.cpp(80,20): warning C4018:  '<': signed/unsigned mismatch
+  NetworkPlayer.cpp
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\Main.cpp(83,46): warning C4305:  'argument': truncation from 'double' to 'float'
+  NetworkedGame.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\NetworkPlayer.cpp: note: see previous definition of '_WINSOCKAPI_'
+  TutorialGame.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\NetworkedGame.cpp: note: see previous definition of '_WINSOCKAPI_'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp: note: see previous definition of '_WINSOCKAPI_'
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(138,41): error C2065:  'filename': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(140,12): error C2065:  'nodeSize': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(141,12): error C2065:  'gridWidth': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(142,12): error C2065:  'gridHeight': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(144,2): error C2065:  'allNodes': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(144,25): error C2061:  syntax error: identifier 'GridNode'
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(146,22): error C2065:  'gridHeight': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(147,23): error C2065:  'gridWidth': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(148,4): error C2065:  'GridNode': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(148,14): error C2065:  'n': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(148,18): error C2065:  'allNodes': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(148,28): error C2065:  'gridWidth': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(151,4): error C2065:  'n': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(152,4): error C2065:  'n': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(152,37): error C2065:  'gridWidth': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(152,64): error C2065:  'gridHeight': undeclared identifier
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(152,75): error C2440:  '<function-style-cast>': cannot convert from 'int' to 'NCL::Maths::Vector3'
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(152,75): message :  No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(464,60): warning C4305:  'argument': truncation from 'double' to 'float'
+  Generating Code...
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(500,60): warning C4305:  'argument': truncation from 'double' to 'float'

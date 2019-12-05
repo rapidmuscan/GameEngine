@@ -17,7 +17,7 @@ namespace NCL {
 
 			void InitCamera();
 			void UpdateKeys();
-
+			void Initworldobjects(const std::string& filename);
 			void InitWorld();
 
 			/*
@@ -33,6 +33,7 @@ namespace NCL {
 
 			bool SelectObject();
 			void MoveSelectedObject();
+			void MoveGoose();
 			void DebugObjectMovement();
 			void LockedObjectMovement();
 			void LockedCameraMovement();
@@ -45,6 +46,7 @@ namespace NCL {
 			GameObject* AddParkKeeperToWorld(const Vector3& position);
 			GameObject* AddCharacterToWorld(const Vector3& position);
 			GameObject* AddAppleToWorld(const Vector3& position);
+			GameObject* goose =nullptr;
 
 
 			GameTechRenderer*	renderer;
