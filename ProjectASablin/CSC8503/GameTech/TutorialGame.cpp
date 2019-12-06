@@ -67,15 +67,15 @@ TutorialGame::~TutorialGame()	{
 }
 
 void TutorialGame::UpdateGame(float dt) {
-	if (!inSelectionMode) {
+	/*if (!inSelectionMode) {
 		world->GetMainCamera()->UpdateCamera(dt);
 	}
 	if (lockedObject != nullptr) {
 		LockedCameraMovement();
-	}
-	/*world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 10, 20));
-	world->GetMainCamera()->SetPitch(-10);
-	world->GetMainCamera()->SetYaw(0);*/
+	}*/
+	world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 60, 40));
+	world->GetMainCamera()->SetPitch(-60);
+	world->GetMainCamera()->SetYaw(0);
 	UpdateKeys();
 	
 	if (useGravity) {
@@ -457,7 +457,7 @@ GameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
 	float size			= 1.0f;
 	float inverseMass	= 1.0f;
 
-	GameObject* goose = new GameObject();
+	GameObject* goose = new GameObject("goose");
 
 
 	SphereVolume* volume = new SphereVolume(size);
@@ -537,8 +537,8 @@ GameObject* TutorialGame::AddCharacterToWorld(const Vector3& position) {
 	return character;
 }
 
-GameObject* TutorialGame::AddAppleToWorld(const Vector3& position) {
-	GameObject* apple = new GameObject();
+AppleGameObject* TutorialGame::AddAppleToWorld(const Vector3& position) {
+	AppleGameObject* apple = new AppleGameObject();
 
 	SphereVolume* volume = new SphereVolume(0.7f);
 	apple->SetBoundingVolume((CollisionVolume*)volume);

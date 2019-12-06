@@ -1,6 +1,7 @@
 #pragma once
 #include "GameTechRenderer.h"
 #include "../CSC8503Common/PhysicsSystem.h"
+#include "../CSC8503Common/AppleGameObject.h"
 
 
 namespace NCL {
@@ -45,7 +46,7 @@ namespace NCL {
 			GameObject* AddGooseToWorld(const Vector3& position);
 			GameObject* AddParkKeeperToWorld(const Vector3& position);
 			GameObject* AddCharacterToWorld(const Vector3& position);
-			GameObject* AddAppleToWorld(const Vector3& position);
+			AppleGameObject* AddAppleToWorld(const Vector3& position);
 			GameObject* goose =nullptr;
 
 
