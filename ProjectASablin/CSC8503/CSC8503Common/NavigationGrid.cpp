@@ -154,7 +154,9 @@ bool NavigationGrid::FindPath(const Vector3& from, const Vector3& to, Navigation
 
 	}
 	return false;
-}
+
+}
+
 
 
 bool NavigationGrid::NodeInList(GridNode* n, std::vector<GridNode*>& list) const {

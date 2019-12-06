@@ -67,13 +67,15 @@ void TestPathfinding() {
 	 NavigationPath outPath;
 	
 	 Vector3 startPos(80, 0, 10);
-	 Vector3 endPos(80, 0, 80);
+	 Vector3 endPos(200, 0, 200);
 	
 	 bool found = grid.FindPath(startPos, endPos, outPath);
 	
 	 Vector3 pos;
 	 while (outPath.PopWaypoint(pos)) {
-	 testNodes.push_back(pos);	}
+	 testNodes.push_back(pos);
+	}
+
 }
 
 void DisplayPathfinding() {

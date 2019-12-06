@@ -1,6 +1,10 @@
-﻿  NavigationGrid.cpp
-C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(79,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(80,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(82,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(83,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+﻿  CollisionDetection.cpp
+  GameObject.cpp
+  GameServer.cpp
+  GameWorld.cpp
+  NetworkObject.cpp
+  PhysicsObject.cpp
+  PhysicsSystem.cpp
+  PositionConstraint.cpp
+  Generating Code...
   CSC8503Common.vcxproj -> C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\Win32\Debug\CSC8503Common.lib

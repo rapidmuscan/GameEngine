@@ -73,9 +73,11 @@ void TutorialGame::UpdateGame(float dt) {
 	if (lockedObject != nullptr) {
 		LockedCameraMovement();
 	}
-
+	/*world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 10, 20));
+	world->GetMainCamera()->SetPitch(-10);
+	world->GetMainCamera()->SetYaw(0);*/
 	UpdateKeys();
-
+	
 	if (useGravity) {
 		Debug::Print("(G)ravity on", Vector2(10, 40));
 	}
@@ -89,7 +91,7 @@ void TutorialGame::UpdateGame(float dt) {
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
 	physics->Update(dt);
-
+	MoveGoose();
 	Debug::FlushRenderables();
 	renderer->Render();
 }
@@ -134,28 +136,7 @@ void TutorialGame::UpdateKeys() {
 	}
 }
 
-void TutorialGame::Initworldobjects(const std::string& filename) {
-	std::ifstream infile(Assets::DATADIR + filename);
 
-	infile >> nodeSize;
-	infile >> gridWidth;
-	infile >> gridHeight;
-
-
-	for (int y = 0; y < gridHeight; ++y) {
-		for (int x = 0; x < gridWidth; ++x) {
-			
-			char type = 0;
-			infile >> type;
-			
-			if (type == 'X') {
-
-				AddCubeToWorld(position, cubeDims);
-			}
-
-		}
-	}
-}
 
 void TutorialGame::LockedObjectMovement() {
 	Matrix4 view		= world->GetMainCamera()->BuildViewMatrix();
@@ -308,6 +289,44 @@ determined by the scroll wheel. In the first tutorial this won't do anything, as
 added linear motion into our physics system. After the second tutorial, objects will move in a straight
 line - after the third, they'll be able to twist under torque aswell.
 */
+void TutorialGame::MoveGoose() {
+
+	Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
+
+	if (Window::GetMouse()->DoubleClicked(MouseButtons::RIGHT)) {
+		goose->GetPhysicsObject()->ApplyAngularImpulse(Vector3(0, -0.3, 0));
+	}
+
+	if (Window::GetMouse()->DoubleClicked(MouseButtons::LEFT)) {
+		goose->GetPhysicsObject()->ApplyAngularImpulse(Vector3(0, 0.3, 0));
+	}
+
+
+
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::W)) {
+		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
+		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, -90, p_w_r.z));
+		goose->GetPhysicsObject()->AddForce(Vector3(-40, 0, 0));
+	}
+
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::S)) {
+		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
+		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 90, p_w_r.z));
+		goose->GetPhysicsObject()->AddForce(Vector3(40, 0, 0));
+	}
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::D)) {
+
+		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
+		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 180, p_w_r.z));
+		goose->GetPhysicsObject()->AddForce(-Vector3(0, 0, 40));
+	}
+
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::A)) {
+		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
+		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 0, p_w_r.z));
+		goose->GetPhysicsObject()->AddForce(Vector3(0, 0, 40));
+	}
+}
 
 void TutorialGame::MoveSelectedObject() {
 	renderer->DrawString(" Click Force :" + std::to_string(forceMagnitude),
@@ -348,13 +367,14 @@ void TutorialGame::InitWorld() {
 	physics->Clear();
 	
 	InitMixedGridWorld(10, 10, 3.5f, 3.5f);
-	AddGooseToWorld(Vector3(30, 2, 0));
-	AddAppleToWorld(Vector3(35, 2, 0));
+	Initworldobjects("TestGrid1.txt");
+	goose = AddGooseToWorld(Vector3(30, 2, 35));
+	AddAppleToWorld(Vector3(35, 2, 35));
 
-	AddParkKeeperToWorld(Vector3(40, 2, 0));
-	AddCharacterToWorld(Vector3(45, 2, 0));
+	AddParkKeeperToWorld(Vector3(40, 2, 35));
+	AddCharacterToWorld(Vector3(45, 2, 35));
 
-	AddFloorToWorld(Vector3(0, -2, 0));
+	AddFloorToWorld(Vector3(190, -2, 190));
 }
 
 //From here on it's functions to add in objects to the world!
@@ -367,7 +387,7 @@ A single function to add a large immoveable cube to the bottom of our world
 GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
 	GameObject* floor = new GameObject();
 
-	Vector3 floorSize = Vector3(100, 2, 100);
+	Vector3 floorSize = Vector3(200, 2, 200);
 	AABBVolume* volume = new AABBVolume(floorSize);
 	floor->SetBoundingVolume((CollisionVolume*)volume);
 	floor->GetTransform().SetWorldScale(floorSize);
@@ -546,8 +566,34 @@ void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacin
 	//AddFloorToWorld(Vector3(0, -2, 0));
 }
 
+void TutorialGame::Initworldobjects(const std::string& filename) {
+
+	std::ifstream infile(Assets::DATADIR + filename);
+	int nodeSize;
+	int gridWidth;
+	int gridHeight;
+	
+	infile >> nodeSize;
+	infile >> gridWidth;
+	infile >> gridHeight;
+
+
+	for (int y = 0; y < gridHeight; ++y) {
+		for (int x = 0; x < gridWidth; ++x) {
+			Vector3 position = Vector3(x * 20, 10.0f, y * 20);
+			char type = 0;
+			infile >> type;
+
+			if (type == 'x') {
+				AddCubeToWorld(position, Vector3(10,10,10),0.0f);
+			}
+
+		}
+	}
+}
+
 void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing) {
-	float sphereRadius = 1.0f;
+	/*float sphereRadius = 1.0f;
 	Vector3 cubeDims = Vector3(1, 1, 1);
 
 	for (int x = 0; x < numCols; ++x) {
@@ -561,7 +607,7 @@ void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing
 				AddSphereToWorld(position, sphereRadius);
 			}
 		}
-	}
+	}*/
 	
 	//AddFloorToWorld(Vector3(0, -2, 0));
 }
@@ -573,7 +619,7 @@ void TutorialGame::InitCubeGridWorld(int numRows, int numCols, float rowSpacing,
 			AddCubeToWorld(position, cubeDims, 1.0f);
 		}
 	}
-	AddFloorToWorld(Vector3(0, -2, 0));
+	//AddFloorToWorld(Vector3(0, -2, 0));
 }
 
 void TutorialGame::BridgeConstraintTest() {
