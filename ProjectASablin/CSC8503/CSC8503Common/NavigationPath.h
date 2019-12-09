@@ -25,6 +25,8 @@ namespace NCL {
 				return true;
 			}
 
+			void DebugDraw();
+
 		protected:
 			std::vector <Vector3> waypoints;
 		};

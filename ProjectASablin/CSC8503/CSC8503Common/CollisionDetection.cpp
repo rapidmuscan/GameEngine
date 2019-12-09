@@ -403,7 +403,7 @@ Ray CollisionDetection::BuildRayFromMouse(const Camera& cam) {
 
 	c.Normalise();
 
-	std::cout << "Ray Direction:" << c << std::endl;
+	//std::cout << "Ray Direction:" << c << std::endl;
 
 	return Ray(cam.GetPosition(), c);
 }

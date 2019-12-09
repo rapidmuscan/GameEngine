@@ -9,7 +9,7 @@ namespace NCL {
 			AppleGameObject();
 
 			virtual void OnCollisionBegin(GameObject* otherObject) {
-				std::cout << "OnCollisionBegin event occured!\n";
+				//std::cout << "OnCollisionBegin event occured!\n";
 				if (otherObject->GetName() == "goose") {
 					GetTransform().SetLocalPosition(Vector3(0, -19999, 0));
 				}

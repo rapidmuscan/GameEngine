@@ -107,7 +107,7 @@ void PhysicsSystem::Update(float dt) {
 	UpdateCollisionList(); //Remove any old collisions
 	//std::cout << iteratorCount << " , " << iterationDt << std::endl;
 	float time = testTimer.GetTimeDeltaSeconds();
-	//std::cout << "Physics time taken: " << time << std::endl;
+	//<< "Physics time taken: " << time << std::endl;
 }
 
 /*
@@ -207,7 +207,8 @@ void PhysicsSystem::ImpulseResolveCollision(GameObject& a, GameObject& b, Collis
 		(p.normal * p.penetration * (physA->GetInverseMass() / totalMass)));
 
 	transformB.SetWorldPosition(transformB.GetWorldPosition() +
-		(p.normal * p.penetration * (physB->GetInverseMass() / totalMass)));	Vector3 relativeA = p.localA;
+		(p.normal * p.penetration * (physB->GetInverseMass() / totalMass)));
+	Vector3 relativeA = p.localA;
 	Vector3 relativeB = p.localB;
 
 	Vector3 angVelocityA =
@@ -218,7 +219,8 @@ void PhysicsSystem::ImpulseResolveCollision(GameObject& a, GameObject& b, Collis
 	Vector3 fullVelocityA = physA->GetLinearVelocity() + angVelocityA;
 	Vector3 fullVelocityB = physB->GetLinearVelocity() + angVelocityB;
 
-	Vector3 contactVelocity = fullVelocityB - fullVelocityA;	float impulseForce = Vector3::Dot(contactVelocity, p.normal);
+	Vector3 contactVelocity = fullVelocityB - fullVelocityA;
+	float impulseForce = Vector3::Dot(contactVelocity, p.normal);
 
 	// now to work out the effect of inertia ....
 	Vector3 inertiaA = Vector3::Cross(physA->GetInertiaTensor() *

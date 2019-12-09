@@ -7,18 +7,22 @@
 #include "../../Common/Assets.h"
 #include "../CSC8503Common/PositionConstraint.h"
 #include <fstream>
-
+#include <iostream>
 using namespace NCL;
 using namespace CSC8503;
 
-TutorialGame::TutorialGame()	{
-	world		= new GameWorld();
-	renderer	= new GameTechRenderer(*world);
-	physics		= new PhysicsSystem(*world);
+TutorialGame::TutorialGame() : grid{ "TestGrid1.txt" }  {
+	world = new GameWorld();
+	renderer = new GameTechRenderer(*world);
+	physics = new PhysicsSystem(*world);
 
-	forceMagnitude	= 10.0f;
-	useGravity		= false;
+	forceMagnitude = 10.0f;
+	useGravity = false;
 	inSelectionMode = false;
+
+
+	//grid = NavigationGrid("TestGrid1.txt");
+
 
 	Debug::SetRenderer(renderer);
 
@@ -27,7 +31,7 @@ TutorialGame::TutorialGame()	{
 
 /*
 
-Each of the little demo scenarios used in the game uses the same 2 meshes, 
+Each of the little demo scenarios used in the game uses the same 2 meshes,
 and the same texture and shader. There's no need to ever load in anything else
 for this module, even in the coursework, but you can add it if you like!
 
@@ -39,22 +43,22 @@ void TutorialGame::InitialiseAssets() {
 		(*into)->UploadToGPU();
 	};
 
-	loadFunc("cube.msh"		 , &cubeMesh);
-	loadFunc("sphere.msh"	 , &sphereMesh);
-	loadFunc("goose.msh"	 , &gooseMesh);
+	loadFunc("cube.msh", &cubeMesh);
+	loadFunc("sphere.msh", &sphereMesh);
+	loadFunc("goose.msh", &gooseMesh);
 	loadFunc("CharacterA.msh", &keeperMesh);
 	loadFunc("CharacterM.msh", &charA);
 	loadFunc("CharacterF.msh", &charB);
-	loadFunc("Apple.msh"	 , &appleMesh);
+	loadFunc("Apple.msh", &appleMesh);
 
-	basicTex	= (OGLTexture*)TextureLoader::LoadAPITexture("checkerboard.png");
+	basicTex = (OGLTexture*)TextureLoader::LoadAPITexture("checkerboard.png");
 	basicShader = new OGLShader("GameTechVert.glsl", "GameTechFrag.glsl");
 
 	InitCamera();
 	InitWorld();
 }
 
-TutorialGame::~TutorialGame()	{
+TutorialGame::~TutorialGame() {
 	delete cubeMesh;
 	delete sphereMesh;
 	delete gooseMesh;
@@ -66,7 +70,14 @@ TutorialGame::~TutorialGame()	{
 	delete world;
 }
 
+float testTime = 0.0f;
+NavigationPath outPath;
+
 void TutorialGame::UpdateGame(float dt) {
+	Vector3 cameraPos = world->GetMainCamera()->GetPosition();
+	string text = "position: (" + std::to_string(cameraPos.x) + "," + std::to_string(cameraPos.y) + "," + std::to_string(cameraPos.z) + ")";
+	Debug::Print(text, Vector2(10, 55));
+
 	/*if (!inSelectionMode) {
 		world->GetMainCamera()->UpdateCamera(dt);
 	}
@@ -77,21 +88,66 @@ void TutorialGame::UpdateGame(float dt) {
 	world->GetMainCamera()->SetPitch(-60);
 	world->GetMainCamera()->SetYaw(0);
 	UpdateKeys();
-	
+
 	if (useGravity) {
 		Debug::Print("(G)ravity on", Vector2(10, 40));
 	}
 	else {
 		Debug::Print("(G)ravity off", Vector2(10, 40));
 	}
+	
+	testTime += dt;		
+	Vector3 startPos = man->GetTransform().GetWorldPosition(); startPos.y = 0.0f;
 
-	SelectObject();
-	MoveSelectedObject();
-	MoveGoose();
+	if (testTime > 3.0f) {
+		testTime = 0.0f;
+		
+
+		Vector3 endPos = goose->GetTransform().GetWorldPosition();
+		std::cout << "StartPos " << startPos << std::endl;
+		std::cout << "endPos " << endPos << std::endl;
+		outPath.Clear();
+		bool found = grid.FindPath(startPos, endPos, outPath);
+		if (!found) {
+			std::cout << "Path not found" << std::endl;
+		}
+		else {
+			outPath.DebugDraw();
+			outPath.PopWaypoint(targetposition);
+
+			if ((startPos - targetposition).Length() < 2) {
+				outPath.PopWaypoint(targetposition);
+			}
+		}
+	}
+	outPath.DebugDraw();
+
+		/*Vector3 pos;
+		while (outPath.PopWaypoint(pos)) {
+			testNodes.push_back(pos);
+		}*/
+
+		SelectObject();
+		MoveSelectedObject();
+		MoveGoose();
+		
+		if ((startPos - targetposition).Length() < 2) {
+			outPath.PopWaypoint(targetposition);
+			testTime = 1000;
+		}
+		Vector3 direction = (targetposition - startPos).Normalised();
+		man->GetPhysicsObject()->AddForce(direction * 50);
+
+		Debug::DrawLine(startPos, targetposition, Vector4(1, 0.55, 0, 1));
+		Debug::DrawLine(startPos, startPos + Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
+		Debug::DrawLine(targetposition, targetposition + Vector3(0, 100, 0), Vector4(1, 1, 0, 1));
+	//}
+	
+
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
 	physics->Update(dt);
-	MoveGoose();
+	//MoveGoose();
 	Debug::FlushRenderables();
 	renderer->Render();
 }
@@ -139,8 +195,8 @@ void TutorialGame::UpdateKeys() {
 
 
 void TutorialGame::LockedObjectMovement() {
-	Matrix4 view		= world->GetMainCamera()->BuildViewMatrix();
-	Matrix4 camWorld	= view.Inverse();
+	Matrix4 view = world->GetMainCamera()->BuildViewMatrix();
+	Matrix4 camWorld = view.Inverse();
 
 	Vector3 rightAxis = Vector3(camWorld.GetColumn(0)); //view is inverse of model!
 
@@ -185,9 +241,14 @@ void  TutorialGame::LockedCameraMovement() {
 	}
 }
 
+void NCL::CSC8503::TutorialGame::CalculatePathCharacter()
+{
+
+}
+
 
 void TutorialGame::DebugObjectMovement() {
-//If we've selected an object, we can manipulate it with some key presses
+	//If we've selected an object, we can manipulate it with some key presses
 	if (inSelectionMode && selectionObject) {
 		//Twist the selected object!
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::LEFT)) {
@@ -235,7 +296,7 @@ bool TutorialGame::SelectObject() {
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::Q)) {
 
 		inSelectionMode = !inSelectionMode;
-		
+
 		if (inSelectionMode) {
 			Window::GetWindow()->ShowOSPointer(true);
 			Window::GetWindow()->LockMouseToWindow(false);
@@ -303,25 +364,25 @@ void TutorialGame::MoveGoose() {
 
 
 
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::W)) {
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::A)) {
 		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
 		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, -90, p_w_r.z));
 		goose->GetPhysicsObject()->AddForce(Vector3(-40, 0, 0));
 	}
 
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::S)) {
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::D)) {
 		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
 		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 90, p_w_r.z));
 		goose->GetPhysicsObject()->AddForce(Vector3(40, 0, 0));
 	}
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::D)) {
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::W)) {
 
 		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
 		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 180, p_w_r.z));
 		goose->GetPhysicsObject()->AddForce(-Vector3(0, 0, 40));
 	}
 
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::A)) {
+	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::S)) {
 		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
 		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 0, p_w_r.z));
 		goose->GetPhysicsObject()->AddForce(Vector3(0, 0, 40));
@@ -365,16 +426,64 @@ void TutorialGame::InitCamera() {
 void TutorialGame::InitWorld() {
 	world->ClearAndErase();
 	physics->Clear();
-	
+
 	InitMixedGridWorld(10, 10, 3.5f, 3.5f);
+
+
+	//generateworld("TestGrid1.txt");
 	Initworldobjects("TestGrid1.txt");
 	goose = AddGooseToWorld(Vector3(30, 2, 35));
 	AddAppleToWorld(Vector3(35, 2, 35));
 
-	AddParkKeeperToWorld(Vector3(40, 2, 35));
+	man = AddParkKeeperToWorld(Vector3(40, 2, 35));
 	AddCharacterToWorld(Vector3(45, 2, 35));
 
 	AddFloorToWorld(Vector3(190, -2, 190));
+}
+
+void NCL::CSC8503::TutorialGame::generateworld(const std::string& filename)
+{
+	std::ofstream myfile(Assets::DATADIR + filename);
+	int hight = 20;
+	int width = 20;
+
+
+
+	myfile << 20;
+	myfile << "\n";
+	myfile << width;
+	myfile << "\n";
+	myfile << hight;
+	myfile << "\n";
+
+	for (int i = 0; i < width; i++)
+	{
+		myfile << "x";
+	}
+
+	for (size_t i = 0; i < hight - 2; i++)
+	{
+		myfile << "\n";
+		myfile << "x";
+		for (size_t i = 0; i < width - 2; i++)
+		{
+			if (std::rand() % 4 == 1 && i > 0) {
+				myfile << "x";
+			}
+			else
+			{
+				myfile << ".";
+			}
+
+		}
+		myfile << "x";
+	}
+	myfile << "\n";
+	for (int i = 0; i < width; i++)
+	{
+		myfile << "x";
+	}
+	myfile.close();
 }
 
 //From here on it's functions to add in objects to the world!
@@ -407,12 +516,12 @@ GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
 /*
 
 Builds a game object that uses a sphere mesh for its graphics, and a bounding sphere for its
-rigid body representation. This and the cube function will let you build a lot of 'simple' 
+rigid body representation. This and the cube function will let you build a lot of 'simple'
 physics worlds. You'll probably need another function for the creation of OBB cubes too.
 
 */
 GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius, float inverseMass) {
-	GameObject* sphere = new GameObject("",1);
+	GameObject* sphere = new GameObject("", 1);
 
 	Vector3 sphereSize = Vector3(radius, radius, radius);
 	SphereVolume* volume = new SphereVolume(radius);
@@ -454,8 +563,8 @@ GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimens
 
 GameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
 {
-	float size			= 1.0f;
-	float inverseMass	= 1.0f;
+	float size = 1.0f;
+	float inverseMass = 1.0f;
 
 	GameObject* goose = new GameObject("goose");
 
@@ -463,7 +572,7 @@ GameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
 	SphereVolume* volume = new SphereVolume(size);
 	goose->SetBoundingVolume((CollisionVolume*)volume);
 
-	goose->GetTransform().SetWorldScale(Vector3(size,size,size) );
+	goose->GetTransform().SetWorldScale(Vector3(size, size, size));
 	goose->GetTransform().SetWorldPosition(position);
 
 	goose->SetRenderObject(new RenderObject(&goose->GetTransform(), gooseMesh, nullptr, basicShader));
@@ -572,7 +681,7 @@ void TutorialGame::Initworldobjects(const std::string& filename) {
 	int nodeSize;
 	int gridWidth;
 	int gridHeight;
-	
+
 	infile >> nodeSize;
 	infile >> gridWidth;
 	infile >> gridHeight;
@@ -580,12 +689,12 @@ void TutorialGame::Initworldobjects(const std::string& filename) {
 
 	for (int y = 0; y < gridHeight; ++y) {
 		for (int x = 0; x < gridWidth; ++x) {
-			Vector3 position = Vector3(x * 20, 10.0f, y * 20);
+			Vector3 position = Vector3(x * nodeSize, nodeSize / 2, y * nodeSize);
 			char type = 0;
 			infile >> type;
 
 			if (type == 'x') {
-				AddCubeToWorld(position, Vector3(10,10,10),0.0f);
+				AddCubeToWorld(position, Vector3(nodeSize / 2, nodeSize /2, nodeSize / 2), 0.0f);
 			}
 
 		}
@@ -608,13 +717,13 @@ void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing
 			}
 		}
 	}*/
-	
+
 	//AddFloorToWorld(Vector3(0, -2, 0));
 }
 
 void TutorialGame::InitCubeGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, const Vector3& cubeDims) {
-	for (int x = 1; x < numCols+1; ++x) {
-		for (int z = 1; z < numRows+1; ++z) {
+	for (int x = 1; x < numCols + 1; ++x) {
+		for (int z = 1; z < numRows + 1; ++z) {
 			Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
 			AddCubeToWorld(position, cubeDims, 1.0f);
 		}
@@ -626,8 +735,8 @@ void TutorialGame::BridgeConstraintTest() {
 	Vector3 cubeSize = Vector3(8, 8, 8);
 
 	float	invCubeMass = 5;
-	int		numLinks	= 25;
-	float	maxDistance	= 30;
+	int		numLinks = 25;
+	float	maxDistance = 30;
 	float	cubeDistance = 20;
 
 	Vector3 startPos = Vector3(500, 1000, 500);
@@ -650,11 +759,11 @@ void TutorialGame::BridgeConstraintTest() {
 }
 
 void TutorialGame::SimpleGJKTest() {
-	Vector3 dimensions		= Vector3(5, 5, 5);
+	Vector3 dimensions = Vector3(5, 5, 5);
 	Vector3 floorDimensions = Vector3(100, 2, 100);
 
 	GameObject* fallingCube = AddCubeToWorld(Vector3(0, 20, 0), dimensions, 10.0f);
-	GameObject* newFloor	= AddCubeToWorld(Vector3(0, 0, 0), floorDimensions, 0.0f);
+	GameObject* newFloor = AddCubeToWorld(Vector3(0, 0, 0), floorDimensions, 0.0f);
 
 	delete fallingCube->GetBoundingVolume();
 	delete newFloor->GetBoundingVolume();

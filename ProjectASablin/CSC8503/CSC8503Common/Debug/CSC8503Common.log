@@ -1,2 +1,6 @@
-﻿  AppleGameObject.cpp
+﻿  NavigationGrid.cpp
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(78,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(79,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(81,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(82,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
   CSC8503Common.vcxproj -> C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\Win32\Debug\CSC8503Common.lib

@@ -36,7 +36,7 @@ NavigationGrid::NavigationGrid(const std::string& filename) : NavigationGrid() {
 			char type = 0;
 			infile >> type;
 			n.type = type;
-			n.position = Vector3((float)(x * gridWidth), 0, (float)(y * gridHeight));
+			n.position = Vector3((float)(x * nodeSize), 0, (float)(y * nodeSize));
 		}
 	}
 
@@ -61,8 +61,7 @@ NavigationGrid::NavigationGrid(const std::string& filename) : NavigationGrid() {
 				if (n.connected[i]) {
 					if (n.connected[i]->type == '.') {
 						n.costs[i] = 1;
-					}
-					if (n.connected[i]->type == 'x') {
+					} else if (n.connected[i]->type == 'x') {
 						n.connected[i] = nullptr; //actually a wall, disconnect!
 					}
 				}
@@ -76,11 +75,13 @@ NavigationGrid::~NavigationGrid() {
 }
 
 bool NavigationGrid::FindPath(const Vector3& from, const Vector3& to, NavigationPath& outPath) {
-	int fromX = (from.x / nodeSize);
-	int fromZ = (from.z / nodeSize);
+	int fromX = ((from.x + (nodeSize / 2)) / nodeSize);
+	int fromZ = ((from.z + (nodeSize / 2)) / nodeSize);
 
-	int toX = (to.x / nodeSize);
-	int toZ = (to.z / nodeSize);
+	int toX = ((to.x + (nodeSize / 2)) / nodeSize);
+	int toZ = ((to.z + (nodeSize / 2)) / nodeSize);
+
+
 
 	if (fromX < 0 || fromX > gridWidth - 1 || fromZ < 0 || fromZ > gridHeight - 1) {
 		return false;

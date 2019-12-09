@@ -206,5 +206,8 @@
     <ClCompile Include="AppleGameObject.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="NavigationPath.cpp">
+      <Filter>Pathfinding</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -68,7 +68,7 @@ namespace NCL {
 			}
 
 			virtual void OnCollisionBegin(GameObject* otherObject) {
-				std::cout << "OnCollisionBegin event occured!\n";
+				//std::cout << "OnCollisionBegin event occured!\n";
 				/*otherObject->GetName() == "goose" ? some : nothing*/
 				/*otherObject->GetTransform().GetLocalPosition(Vector3(0,-199999999999,0));*/
 			}
