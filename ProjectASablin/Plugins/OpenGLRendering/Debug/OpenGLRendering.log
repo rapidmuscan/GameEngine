@@ -1,2 +1,8 @@
-﻿  OGLShader.cpp
-  OpenGLRendering.vcxproj -> C:\Users\b8057567\Documents\ProjectAS\ProjectASablin\Win32\Debug\OpenGLRendering.lib
+﻿  glad.c
+  OGLComputeShader.cpp
+  OGLMesh.cpp
+  OGLRenderer.cpp
+  OGLShader.cpp
+  OGLTexture.cpp
+  Generating Code...
+  OpenGLRendering.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\OpenGLRendering.lib

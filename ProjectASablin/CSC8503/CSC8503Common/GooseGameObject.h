@@ -9,13 +9,21 @@ namespace NCL {
 			GooseGameObject(string name = "", int _Layer = 0);
 			int ApplesEaten = 0;
 
-			
+			int Applesatspawn = 0;
 			
 
 			virtual void OnCollisionBegin(GameObject* otherObject) {
 				//std::cout << "OnCollisionBegin event occured!\n";
 				if (otherObject->GetName() == "apple") {
 					ApplesEaten++;
+				}
+
+				if (otherObject->GetName() == "tower") {
+					if (ApplesEaten > 0)
+					{
+						ApplesEaten--;
+						Applesatspawn++;
+					}
 				}
 			}
 
