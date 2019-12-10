@@ -126,6 +126,9 @@
     <ClInclude Include="AppleGameObject.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="GooseGameObject.h">
+      <Filter>Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionDetection.cpp">
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="NavigationPath.cpp">
       <Filter>Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="GooseGameObject.cpp">
+      <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

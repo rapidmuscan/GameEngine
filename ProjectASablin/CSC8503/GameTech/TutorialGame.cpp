@@ -8,10 +8,11 @@
 #include "../CSC8503Common/PositionConstraint.h"
 #include <fstream>
 #include <iostream>
+#include <math.h>
 using namespace NCL;
 using namespace CSC8503;
 
-TutorialGame::TutorialGame() : grid{ "TestGrid1.txt" }  {
+TutorialGame::TutorialGame(Window* w) : grid{ "TestGrid1.txt" }  {
 	world = new GameWorld();
 	renderer = new GameTechRenderer(*world);
 	physics = new PhysicsSystem(*world);
@@ -19,7 +20,8 @@ TutorialGame::TutorialGame() : grid{ "TestGrid1.txt" }  {
 	forceMagnitude = 10.0f;
 	useGravity = false;
 	inSelectionMode = false;
-
+	Screen = w;
+	
 
 	//grid = NavigationGrid("TestGrid1.txt");
 
@@ -70,13 +72,14 @@ TutorialGame::~TutorialGame() {
 	delete world;
 }
 
-float testTime = 0.0f;
-NavigationPath outPath;
+
 
 void TutorialGame::UpdateGame(float dt) {
 	Vector3 cameraPos = world->GetMainCamera()->GetPosition();
 	string text = "position: (" + std::to_string(cameraPos.x) + "," + std::to_string(cameraPos.y) + "," + std::to_string(cameraPos.z) + ")";
 	Debug::Print(text, Vector2(10, 55));
+
+	
 
 	/*if (!inSelectionMode) {
 		world->GetMainCamera()->UpdateCamera(dt);
@@ -84,6 +87,7 @@ void TutorialGame::UpdateGame(float dt) {
 	if (lockedObject != nullptr) {
 		LockedCameraMovement();
 	}*/
+
 	world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 60, 40));
 	world->GetMainCamera()->SetPitch(-60);
 	world->GetMainCamera()->SetYaw(0);
@@ -95,61 +99,34 @@ void TutorialGame::UpdateGame(float dt) {
 	else {
 		Debug::Print("(G)ravity off", Vector2(10, 40));
 	}
-	
-	testTime += dt;		
-	Vector3 startPos = man->GetTransform().GetWorldPosition(); startPos.y = 0.0f;
-
-	if (testTime > 3.0f) {
-		testTime = 0.0f;
-		
-
-		Vector3 endPos = goose->GetTransform().GetWorldPosition();
-		std::cout << "StartPos " << startPos << std::endl;
-		std::cout << "endPos " << endPos << std::endl;
-		outPath.Clear();
-		bool found = grid.FindPath(startPos, endPos, outPath);
-		if (!found) {
-			std::cout << "Path not found" << std::endl;
-		}
-		else {
-			outPath.DebugDraw();
-			outPath.PopWaypoint(targetposition);
-
-			if ((startPos - targetposition).Length() < 2) {
-				outPath.PopWaypoint(targetposition);
-			}
-		}
+	if (std::abs(goose->GetTransform().GetWorldPosition().x - man->GetTransform().GetWorldPosition().x) < 4 || std::abs(goose->GetTransform().GetWorldPosition().y - man->GetTransform().GetWorldPosition().y) < 4)
+	{
+		Vector3 direction = (goose->GetTransform().GetWorldPosition() - man->GetTransform().GetWorldPosition()).Normalised();
+		man->GetPhysicsObject()->AddForce(direction * 150);
 	}
-	outPath.DebugDraw();
-
-		/*Vector3 pos;
-		while (outPath.PopWaypoint(pos)) {
-			testNodes.push_back(pos);
-		}*/
-
-		SelectObject();
-		MoveSelectedObject();
-		MoveGoose();
-		
-		if ((startPos - targetposition).Length() < 2) {
-			outPath.PopWaypoint(targetposition);
-			testTime = 1000;
-		}
-		Vector3 direction = (targetposition - startPos).Normalised();
-		man->GetPhysicsObject()->AddForce(direction * 50);
-
-		Debug::DrawLine(startPos, targetposition, Vector4(1, 0.55, 0, 1));
-		Debug::DrawLine(startPos, startPos + Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
-		Debug::DrawLine(targetposition, targetposition + Vector3(0, 100, 0), Vector4(1, 1, 0, 1));
-	//}
+	ManWalk(dt);
+	AppleInitworldobjects("TestGrid1.txt");
 	
-
+	Debug::Print(std::to_string(goose->ApplesEaten), Vector2(40, 200));
+	Debug::Print(std::to_string(Screen->GetScreenSize().y), Vector2(Screen->GetScreenSize().x/2, Screen->GetScreenSize().y/2));
+	
+	
+	SelectObject();
+	MoveSelectedObject();
+	MoveGoose();
+	
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
 	physics->Update(dt);
 	//MoveGoose();
 	Debug::FlushRenderables();
 	renderer->Render();
+
+	if (firsframecheck < 1) {
+		useGravity = true;
+		physics->UseGravity(useGravity);
+		firsframecheck++;
+	}
 }
 
 void TutorialGame::UpdateKeys() {
@@ -193,6 +170,48 @@ void TutorialGame::UpdateKeys() {
 }
 
 
+
+void TutorialGame::ManWalk(float dt) {
+	testTime += dt;
+	Vector3 startPos = man->GetTransform().GetWorldPosition(); startPos.y = 0.0f;
+
+	if (testTime > 3.0f) {
+		testTime = 0.0f;
+
+
+		Vector3 endPos = goose->GetTransform().GetWorldPosition();
+		std::cout << "StartPos " << startPos << std::endl;
+		std::cout << "endPos " << endPos << std::endl;
+		outPath.Clear();
+		bool found = grid.FindPath(startPos, endPos, outPath);
+		if (!found) {
+			std::cout << "Path not found" << std::endl;
+		}
+		else {
+			outPath.DebugDraw();
+			outPath.PopWaypoint(targetposition);
+
+			if ((startPos - targetposition).Length() < 2) {
+				outPath.PopWaypoint(targetposition);
+			}
+		}
+	}
+	outPath.DebugDraw();
+
+
+	
+
+	if ((startPos - targetposition).Length() < 2) {
+		outPath.PopWaypoint(targetposition);
+		testTime = 1000;
+	}
+	Vector3 direction = (targetposition - startPos).Normalised();
+	man->GetPhysicsObject()->AddForce(direction * 50);
+
+	Debug::DrawLine(startPos, targetposition, Vector4(1, 0.55, 0, 1));
+	Debug::DrawLine(startPos, startPos + Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
+	Debug::DrawLine(targetposition, targetposition + Vector3(0, 100, 0), Vector4(1, 1, 0, 1));
+}
 
 void TutorialGame::LockedObjectMovement() {
 	Matrix4 view = world->GetMainCamera()->BuildViewMatrix();
@@ -427,7 +446,7 @@ void TutorialGame::InitWorld() {
 	world->ClearAndErase();
 	physics->Clear();
 
-	InitMixedGridWorld(10, 10, 3.5f, 3.5f);
+	//InitMixedGridWorld(10, 10, 3.5f, 3.5f);
 
 
 	//generateworld("TestGrid1.txt");
@@ -486,7 +505,7 @@ void NCL::CSC8503::TutorialGame::generateworld(const std::string& filename)
 	myfile.close();
 }
 
-//From here on it's functions to add in objects to the world!
+
 
 /*
 
@@ -561,12 +580,12 @@ GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimens
 	return cube;
 }
 
-GameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
+GooseGameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
 {
 	float size = 1.0f;
 	float inverseMass = 1.0f;
 
-	GameObject* goose = new GameObject("goose");
+	GooseGameObject* goose = new GooseGameObject("goose");
 
 
 	SphereVolume* volume = new SphereVolume(size);
@@ -647,7 +666,7 @@ GameObject* TutorialGame::AddCharacterToWorld(const Vector3& position) {
 }
 
 AppleGameObject* TutorialGame::AddAppleToWorld(const Vector3& position) {
-	AppleGameObject* apple = new AppleGameObject();
+	AppleGameObject* apple = new AppleGameObject("apple");
 
 	SphereVolume* volume = new SphereVolume(0.7f);
 	apple->SetBoundingVolume((CollisionVolume*)volume);
@@ -659,6 +678,8 @@ AppleGameObject* TutorialGame::AddAppleToWorld(const Vector3& position) {
 
 	apple->GetPhysicsObject()->SetInverseMass(1.0f);
 	apple->GetPhysicsObject()->InitSphereInertia();
+
+	apple->GetRenderObject()->SetColour(Vector4(0,1,0,1));
 
 	world->AddGameObject(apple);
 
@@ -696,30 +717,43 @@ void TutorialGame::Initworldobjects(const std::string& filename) {
 			if (type == 'x') {
 				AddCubeToWorld(position, Vector3(nodeSize / 2, nodeSize /2, nodeSize / 2), 0.0f);
 			}
+			
+
+		}
+	}
+	Vector3 position = Vector3(nodeSize, nodeSize ,  nodeSize);
+	Apple = AddAppleToWorld(Vector3(0, -19999, 0));
+}
+
+void TutorialGame::AppleInitworldobjects(const std::string& filename) {
+
+	std::ifstream infile(Assets::DATADIR + filename);
+	int nodeSize;
+	int gridWidth;
+	int gridHeight;
+
+	infile >> nodeSize;
+	infile >> gridWidth;
+	infile >> gridHeight;
+
+
+	for (int y = 0; y < gridHeight; ++y) {
+		for (int x = 0; x < gridWidth; ++x) {
+			Vector3 position = Vector3(x * nodeSize, nodeSize / 2, y * nodeSize);
+			char type = 0;
+			infile >> type;
+
+			if (type == '.' && (goose->ApplesEaten + applesinworld) < 3) {
+			if (std::rand() % 2 == 1) {
+				Apple = AddAppleToWorld(position);
+				applesinworld++;
+			}
+			}
 
 		}
 	}
 }
 
-void TutorialGame::InitMixedGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing) {
-	/*float sphereRadius = 1.0f;
-	Vector3 cubeDims = Vector3(1, 1, 1);
-
-	for (int x = 0; x < numCols; ++x) {
-		for (int z = 0; z < numRows; ++z) {
-			Vector3 position = Vector3(x * colSpacing, 10.0f, z * rowSpacing);
-
-			if (rand() % 2) {
-				AddCubeToWorld(position, cubeDims);
-			}
-			else {
-				AddSphereToWorld(position, sphereRadius);
-			}
-		}
-	}*/
-
-	//AddFloorToWorld(Vector3(0, -2, 0));
-}
 
 void TutorialGame::InitCubeGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, const Vector3& cubeDims) {
 	for (int x = 1; x < numCols + 1; ++x) {

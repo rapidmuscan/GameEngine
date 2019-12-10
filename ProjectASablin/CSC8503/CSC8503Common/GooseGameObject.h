@@ -3,17 +3,19 @@
 
 namespace NCL {
 	namespace CSC8503 {
-		class AppleGameObject : public GameObject
+		class GooseGameObject : public GameObject
 		{
 		public:
-			AppleGameObject(string name = "", int _Layer = 0);
+			GooseGameObject(string name = "", int _Layer = 0);
+			int ApplesEaten = 0;
+
 			
 			
+
 			virtual void OnCollisionBegin(GameObject* otherObject) {
 				//std::cout << "OnCollisionBegin event occured!\n";
-				if (otherObject->GetName() == "goose") {
-					GetTransform().SetLocalPosition(Vector3(0, -19999, 0));
-				
+				if (otherObject->GetName() == "apple") {
+					ApplesEaten++;
 				}
 			}
 
@@ -22,4 +24,5 @@ namespace NCL {
 			}
 		};
 	}
-}
+};
+
