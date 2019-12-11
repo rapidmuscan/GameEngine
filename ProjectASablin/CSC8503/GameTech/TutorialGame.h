@@ -61,6 +61,7 @@ namespace NCL {
 			AppleGameObject* AddAppleToWorld(const Vector3& position);
 			GooseGameObject* goose = nullptr;
 			EnemyGameObject* man = nullptr;
+			
 			AppleGameObject* Apple;
 
 			GameTechRenderer* renderer;

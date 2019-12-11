@@ -1,3 +1,4 @@
+
 #include "TutorialGame.h"
 #include "../CSC8503Common/GameWorld.h"
 #include "../../Plugins/OpenGLRendering/OGLMesh.h"
@@ -9,6 +10,8 @@
 #include <fstream>
 #include <iostream>
 #include <math.h>
+#include "Music.h"
+
 using namespace NCL;
 using namespace CSC8503;
 
@@ -16,6 +19,8 @@ TutorialGame::TutorialGame(Window* w) {
 	world = new GameWorld();
 	renderer = new GameTechRenderer(*world);
 	physics = new PhysicsSystem(*world);
+
+	PlaySound(TEXT("JUSTMUS.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 
 	forceMagnitude = 10.0f;
 	useGravity = false;
@@ -70,8 +75,7 @@ void TutorialGame::UpdateGame(float dt) {
 	
 	Vector3 cameraPos = world->GetMainCamera()->GetPosition();
 	string text = "position: (" + std::to_string(cameraPos.x) + "," + std::to_string(cameraPos.y) + "," + std::to_string(cameraPos.z) + ")";
-	Debug::Print(text, Vector2(10, 55));
-
+	//Debug::Print(text, Vector2(10, 55));
 
 
 	/*if (!inSelectionMode) {
@@ -86,27 +90,34 @@ void TutorialGame::UpdateGame(float dt) {
 	world->GetMainCamera()->SetYaw(0);
 	UpdateKeys();
 
-	if (useGravity) {
+	/*if (useGravity) {
 		Debug::Print("(G)ravity on", Vector2(10, 40));
 	}
 	else {
 		Debug::Print("(G)ravity off", Vector2(10, 40));
+	}*/
+
+	man->EnemyLogic(dt, goose,40,80);
+
+
+	if (man->tuched > 0) {
+		applesinworld = applesinworld - goose->ApplesEaten;
+		man->reset();
+		goose->cleenbag();
 	}
-	man->EnemyLogic(dt, goose);
 
-
-
-
+	Debug::Print(std::to_string(applesinworld), Vector2(50, 50));
 
 	AppleInitworldobjects("TestGrid1.txt");
 
-	Debug::Print(std::to_string(goose->ApplesEaten), Vector2(40, 200));
-	Debug::Print(std::to_string(Screen->GetScreenSize().y), Vector2(Screen->GetScreenSize().x / 2, Screen->GetScreenSize().y / 2));
+
+	
+	//Debug::Print(std::to_string(Screen->GetScreenSize().y), Vector2(Screen->GetScreenSize().x / 2, Screen->GetScreenSize().y / 2));
 
 
 	SelectObject();
 	MoveSelectedObject();
-	MoveGoose();
+	goose->goosebehave(Screen);
 
 	world->UpdateWorld(dt);
 	renderer->Update(dt);
@@ -215,10 +226,7 @@ void  TutorialGame::LockedCameraMovement() {
 	}
 }
 
-void NCL::CSC8503::TutorialGame::CalculatePathCharacter()
-{
 
-}
 
 
 void TutorialGame::DebugObjectMovement() {
@@ -324,44 +332,7 @@ determined by the scroll wheel. In the first tutorial this won't do anything, as
 added linear motion into our physics system. After the second tutorial, objects will move in a straight
 line - after the third, they'll be able to twist under torque aswell.
 */
-void TutorialGame::MoveGoose() {
 
-	Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
-
-	if (Window::GetMouse()->DoubleClicked(MouseButtons::RIGHT)) {
-		goose->GetPhysicsObject()->ApplyAngularImpulse(Vector3(0, -0.3, 0));
-	}
-
-	if (Window::GetMouse()->DoubleClicked(MouseButtons::LEFT)) {
-		goose->GetPhysicsObject()->ApplyAngularImpulse(Vector3(0, 0.3, 0));
-	}
-
-
-
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::LEFT)) {
-		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
-		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, -90, p_w_r.z));
-		goose->GetPhysicsObject()->AddForce(Vector3(-40, 0, 0));
-	}
-
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::RIGHT)) {
-		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
-		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 90, p_w_r.z));
-		goose->GetPhysicsObject()->AddForce(Vector3(40, 0, 0));
-	}
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP)) {
-
-		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
-		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 180, p_w_r.z));
-		goose->GetPhysicsObject()->AddForce(-Vector3(0, 0, 40));
-	}
-
-	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::DOWN)) {
-		Vector3 p_w_r = goose->GetTransform().GetLocalOrientation().ToEuler();
-		goose->GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 0, p_w_r.z));
-		goose->GetPhysicsObject()->AddForce(Vector3(0, 0, 40));
-	}
-}
 
 void TutorialGame::MoveSelectedObject() {
 	renderer->DrawString(" Click Force :" + std::to_string(forceMagnitude),
@@ -722,9 +693,9 @@ void TutorialGame::AppleInitworldobjects(const std::string& filename) {
 	infile >> gridWidth;
 	infile >> gridHeight;
 
-	if (oldvalspawn < goose->Applesatspawn) {
-		oldvalspawn++;
+	if (goose->touch) {
 		applesinworld--;
+		goose->SetBack();
 	}
 
 	for (int y = 0; y < gridHeight; ++y) {
@@ -733,7 +704,7 @@ void TutorialGame::AppleInitworldobjects(const std::string& filename) {
 			char type = 0;
 			infile >> type;
 
-			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 3) && (x != 1) &&(y != 1) ){
+			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 12) && (x != 1) &&(y != 1) ){
 				if (curnum == rundnumber) {
 					Apple = AddAppleToWorld(position);
 					applesinworld++;

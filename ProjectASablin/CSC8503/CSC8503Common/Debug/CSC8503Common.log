@@ -1,2 +1,60 @@
-﻿  GooseGameObject.cpp
-  CSC8503Common.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\CSC8503Common.lib
+﻿  AppleGameObject.cpp
+  BoundingAABB.cpp
+  BoundingOOBB.cpp
+  BoundingSphere.cpp
+  BoundingVolume.cpp
+  CollisionDetection.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  Debug.cpp
+  EnemyGameObject.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.cpp(11,24): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.cpp(17,36): warning C4244:  'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.cpp(62,43): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+  GameClient.cpp
+  GameObject.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.cpp(64,65): warning C4305:  'argument': truncation from 'double' to 'float'
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  GameServer.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.cpp(14,8): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
+  GameWorld.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  GooseGameObject.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(56,44): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(63,43): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(69,50): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(75,49): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+  NavigationGrid.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(80,48): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(78,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(79,12): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(81,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+  NavigationMesh.cpp
+  NavigationPath.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationGrid.cpp(82,10): warning C4244:  'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationPath.cpp(8,20): warning C4018:  '<': signed/unsigned mismatch
+  NetworkBase.cpp
+  NetworkObject.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\NavigationPath.cpp(11,46): warning C4305:  'argument': truncation from 'double' to 'float'
+  NetworkState.cpp
+  PhysicsObject.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
+  PhysicsSystem.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  PositionConstraint.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  PushdownMachine.cpp
+  PushdownState.cpp
+  QuadTree.cpp
+  RenderObject.cpp
+  StateMachine.cpp
+  StateTransition.cpp
+  Transform.cpp
+  Generating Code...
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  CSC8503Common.vcxproj -> C:\Users\b8057567\Documents\ASProject\ProjectASablin\Win32\Debug\CSC8503Common.lib

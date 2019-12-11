@@ -6,22 +6,24 @@ NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer) : 
 	Layer = _Layer;
 }
 
-void EnemyGameObject::EnemyLogic(float dt, GameObject* target, int maxrange, int speed)
+void EnemyGameObject::EnemyLogic(float dt, GameObject* target, int maxrange, int speed )
 {
+	buff  = target->GetLvl();
+
 	float Difinx = std::abs(target->GetTransform().GetWorldPosition().x - GetTransform().GetWorldPosition().x);
-	float Difinz = std::abs(target->GetTransform().GetWorldPosition().y - GetTransform().GetWorldPosition().y);
-	if ((Difinx > 4 || Difinz > 4) && (Difinx < maxrange && Difinz < maxrange))
+	float Difinz = std::abs(target->GetTransform().GetWorldPosition().z - GetTransform().GetWorldPosition().z);
+	if ((Difinx > 4 || Difinz > 4) && (Difinx < (maxrange + (maxrange *  buff / 100)) && Difinz < (maxrange + (maxrange * buff / 100))))
 	{
-		folowingwithalg(dt, target);
+		folowingwithalg(dt, target,speed + (speed * buff/100));
 	}
 	else if ((Difinx < 4 && Difinz < 4))
 	{
 		Vector3 direction = (target->GetTransform().GetWorldPosition() - GetTransform().GetWorldPosition()).Normalised();
-		GetPhysicsObject()->AddForce(direction * speed);
+		GetPhysicsObject()->AddForce(direction * 90);
 	}
 }
 
-void EnemyGameObject::folowingwithalg(float dt, GameObject* target)
+void EnemyGameObject::folowingwithalg(float dt, GameObject* target,int speed )
 {
 	testTime += dt;
 	Vector3 startPos = GetTransform().GetWorldPosition(); startPos.y = 0.0f;
@@ -57,7 +59,7 @@ void EnemyGameObject::folowingwithalg(float dt, GameObject* target)
 		testTime = 1000;
 	}
 	Vector3 direction = (targetposition - startPos).Normalised();
-	GetPhysicsObject()->AddForce(direction * 50);
+	GetPhysicsObject()->AddForce(direction * speed);
 
 	Debug::DrawLine(startPos, targetposition, Vector4(1, 0.55, 0, 1));
 	Debug::DrawLine(startPos, startPos + Vector3(0, 100, 0), Vector4(1, 0, 0, 1));

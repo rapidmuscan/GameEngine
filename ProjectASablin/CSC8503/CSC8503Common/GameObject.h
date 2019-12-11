@@ -16,7 +16,7 @@ namespace NCL {
 
 		class GameObject	{
 		public:
-			GameObject(string name = "" , int _Layer = 0);
+			GameObject(string name = "" , int _Layer = 0, int lvl = 0);
 			~GameObject();
 
 			void SetBoundingVolume(CollisionVolume* vol) {
@@ -62,7 +62,9 @@ namespace NCL {
 			const string& GetName() const {
 				return name;
 			}
-			
+			int GetLvl() {
+				return lvl;
+			}
 			int GetLayer() {
 				return Layer;
 			}
@@ -94,7 +96,7 @@ namespace NCL {
 			bool	isActive;
 			string	name;
 			Vector3 broadphaseAABB;
-			
+			float lvl;
 			
 			int Layer;
 		};

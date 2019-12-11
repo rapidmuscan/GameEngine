@@ -3,7 +3,7 @@
 
 using namespace NCL::CSC8503;
 
-GameObject::GameObject(string objectName , int _Layer)	{
+GameObject::GameObject(string objectName , int _Layer,int _lvl)	{
 	name			= objectName;
 	isActive		= true;
 	boundingVolume	= nullptr;
@@ -11,6 +11,7 @@ GameObject::GameObject(string objectName , int _Layer)	{
 	renderObject	= nullptr;
 	networkObject	= nullptr;
 	Layer = _Layer;
+	lvl = _lvl;
 }
 
 GameObject::~GameObject()	{
