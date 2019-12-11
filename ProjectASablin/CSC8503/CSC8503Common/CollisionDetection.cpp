@@ -148,6 +148,14 @@ bool CollisionDetection::ObjectIntersection(GameObject* a, GameObject* b, Collis
 		return false;
 
 	}
+	if (a->GetName() != "floor" && b->GetName() != "floor") {
+		if (a->GetLayer() != b->GetLayer())
+		{
+			return false;
+		}
+	}
+
+
 
 	collisionInfo.a = a;
 	collisionInfo.b = b;

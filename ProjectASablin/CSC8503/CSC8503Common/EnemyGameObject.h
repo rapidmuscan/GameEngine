@@ -4,18 +4,24 @@
 #include "../../Common/Assets.h"
 #include "../CSC8503Common/PhysicsSystem.h"
 #include "../../Common/Assets.h"
+#include "../CSC8503Common/StateTransition.h"
 
 namespace NCL {
 	namespace CSC8503 {
 		class EnemyGameObject : public GameObject
 		{
 		public:
-			EnemyGameObject(string name = "", int _Layer = 0);
+			EnemyGameObject(string name = "", int _Layer = 0, GameObject * _target = nullptr);
 
 			int tuched = 0;
 			float buff = 0;
+			GameObject* target = nullptr;
 
-			void EnemyLogic(float dt, GameObject* target, int maxrange = 60, int speed = 100);
+
+			void EnemyLogic(float dt);
+
+			static void FolowingEnemy(float dt, void* data);
+			static void OtherThing(float dt, void* data);
 
 			void folowingwithalg(float dt, GameObject* target, int speed);
 
@@ -45,6 +51,45 @@ namespace NCL {
 			virtual void OnCollisionEnd(GameObject* otherObject) {
 				//std::cout << "OnCollisionEnd event occured!\n";
 			}
+			
+		};
+
+		class ShouldFollowEnemy : public StateTransition
+		{
+		public:
+			ShouldFollowEnemy(EnemyGameObject* enemy, State* srcState, State* destState) : enemy(enemy)
+			{
+				sourceState = srcState;
+				destinationState = destState;
+			}
+
+			virtual bool CanTransition() const override
+			{
+				//enemy->
+				return true;
+			}
+
+		protected:
+			EnemyGameObject* enemy;
+		};
+
+		class ShouldDoTheOTherThing : public StateTransition
+		{
+		public:
+			ShouldDoTheOTherThing(EnemyGameObject* enemy, State* srcState, State* destState) : enemy(enemy)
+			{
+				sourceState = srcState;
+				destinationState = destState;
+			}
+
+			virtual bool CanTransition() const override
+			{
+				//enemy->
+				return false;
+			}
+
+		protected:
+			EnemyGameObject* enemy;
 		};
 	}
 }

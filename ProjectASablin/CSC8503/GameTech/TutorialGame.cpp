@@ -29,6 +29,7 @@ TutorialGame::TutorialGame(Window* w) {
 
 	Debug::SetRenderer(renderer);
 
+
 	InitialiseAssets();
 }
 
@@ -51,10 +52,28 @@ void TutorialGame::InitialiseAssets() {
 	KeeperTex = (OGLTexture*)TextureLoader::LoadAPITexture("EnemyTex.png");
 	GrounTex = (OGLTexture*)TextureLoader::LoadAPITexture("GrounTex.png");
 	groundTex = (OGLTexture*)TextureLoader::LoadAPITexture("ground.png");
+	ChestTex = (OGLTexture*)TextureLoader::LoadAPITexture("gold-texture.jpg");
 	basicShader = new OGLShader("GameTechVert.glsl", "GameTechFrag.glsl");
 
 	InitCamera();
 	InitWorld();
+	InitStateMachine();
+}
+
+void TutorialGame::InitStateMachine() {
+	statemachine = new StateMachine();
+
+	GenericState* stateA = new GenericState(EnemyGameObject::FolowingEnemy, static_cast<void*>(man));
+	GenericState* stateB = new GenericState(EnemyGameObject::OtherThing, static_cast<void*>(man));
+
+	statemachine->AddState(stateA);
+	statemachine->AddState(stateB);
+
+	StateTransition* stateTransitionA = new ShouldFollowEnemy(man, stateB, stateA);
+	StateTransition* stateTransitionB = new ShouldDoTheOTherThing(man, stateA, stateB);
+
+	statemachine->AddTransition(stateTransitionA);
+	statemachine->AddTransition(stateTransitionB);
 }
 
 TutorialGame::~TutorialGame() {
@@ -97,7 +116,8 @@ void TutorialGame::UpdateGame(float dt) {
 		Debug::Print("(G)ravity off", Vector2(10, 40));
 	}*/
 
-	man->EnemyLogic(dt, goose,40,80);
+	statemachine->Update(dt);
+	//man->EnemyLogic(dt, goose,40,80);
 
 
 	if (man->tuched > 0) {
@@ -298,7 +318,7 @@ bool TutorialGame::SelectObject() {
 			}
 
 			Ray ray = CollisionDetection::BuildRayFromMouse(*world->GetMainCamera());
-
+			///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			RayCollision closestCollision;
 			if (world->Raycast(ray, closestCollision, true)) {
 				selectionObject = (GameObject*)closestCollision.node;
@@ -444,13 +464,8 @@ void NCL::CSC8503::TutorialGame::generateworld(const std::string& filename)
 
 
 
-/*
-
-A single function to add a large immoveable cube to the bottom of our world
-
-*/
 GameObject* TutorialGame::AddFloorToWorld(const Vector3& position, int nodesize) {
-	GameObject* floor = new GameObject();
+	GameObject* floor = new GameObject("floor");
 
 	Vector3 floorSize = Vector3(nodesize* nodesize, 2, nodesize* nodesize);
 	AABBVolume* volume = new AABBVolume(floorSize);
@@ -469,13 +484,7 @@ GameObject* TutorialGame::AddFloorToWorld(const Vector3& position, int nodesize)
 	return floor;
 }
 
-/*
 
-Builds a game object that uses a sphere mesh for its graphics, and a bounding sphere for its
-rigid body representation. This and the cube function will let you build a lot of 'simple'
-physics worlds. You'll probably need another function for the creation of OBB cubes too.
-
-*/
 GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius, float inverseMass) {
 	GameObject* sphere = new GameObject("", 1);
 
@@ -517,6 +526,27 @@ GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimens
 	return cube;
 }
 
+GameObject* TutorialGame::AddChestToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name = "") {
+	GameObject* cube = new GameObject(name, 0);
+
+	AABBVolume* volume = new AABBVolume(dimensions);
+
+	cube->SetBoundingVolume((CollisionVolume*)volume);
+
+	cube->GetTransform().SetWorldPosition(position);
+	cube->GetTransform().SetWorldScale(dimensions);
+
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, ChestTex, basicShader));
+	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
+
+	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
+	cube->GetPhysicsObject()->InitCubeInertia();
+
+	world->AddGameObject(cube);
+
+	return cube;
+}
+
 GooseGameObject* TutorialGame::AddGooseToWorld(const Vector3& position)
 {
 	float size = 1.0f;
@@ -547,7 +577,7 @@ EnemyGameObject* TutorialGame::AddParkKeeperToWorld(const Vector3& position)
 	float meshSize = 4.0f;
 	float inverseMass = 0.5f;
 
-	EnemyGameObject* keeper = new EnemyGameObject();
+	EnemyGameObject* keeper = new EnemyGameObject("",0,goose);
 
 	AABBVolume* volume = new AABBVolume(Vector3(0.3, 0.9f, 0.3) * meshSize);
 	keeper->SetBoundingVolume((CollisionVolume*)volume);
@@ -650,31 +680,22 @@ void TutorialGame::Initworldobjects(const std::string& filename) {
 			Vector3 position = Vector3(x * nodeSize, nodeSize / 2, y * nodeSize);
 			char type = 0;
 			infile >> type;
-			if ((x == 1) && (y == 1)) {
-				
+			if ((x == 1) && (y == 1)) {		
 			}
-			else
-			{
+			else {
 				if (type == 'x') {
 					AddCubeToWorld(position, Vector3(nodeSize / 2, nodeSize / 2, nodeSize / 2), 0.0f);
 				}
 			}
-
-		}
+			}
 	}
-
-			
-	AddCubeToWorld(Vector3(nodeSize + ((nodeSize) / 4), nodeSize / 4, nodeSize + ((nodeSize) / 4)), Vector3((nodeSize / 2)/3, (nodeSize / 2)/3, (nodeSize / 2)/3), 0.0f, "tower");
+	AddChestToWorld(Vector3(nodeSize + ((nodeSize) / 4), nodeSize / 4, nodeSize + ((nodeSize) / 4)), Vector3((nodeSize / 2)/3, (nodeSize / 2)/3, (nodeSize / 2)/3), 0.0f, "tower");
 	
-
-
-
-
-
 	Vector3 position = Vector3(nodeSize, nodeSize, nodeSize);
 	Apple = AddAppleToWorld(Vector3(0, -19999, 0));
-	man = AddParkKeeperToWorld(Vector3(1 * nodeSize, nodeSize / 2, (gridHeight - 2)* nodeSize));
 	goose = AddGooseToWorld(Vector3(1 * nodeSize, nodeSize / 2, 2 * nodeSize));
+	man = AddParkKeeperToWorld(Vector3(1 * nodeSize, nodeSize / 2, (gridHeight - 2)* nodeSize));
+	
 	AddFloorToWorld(Vector3((nodeSize*nodeSize)-(nodeSize/2), -2, (nodeSize*nodeSize)-(nodeSize/2)), nodeSize);
 	oldvalspawn = goose->Applesatspawn;
 }

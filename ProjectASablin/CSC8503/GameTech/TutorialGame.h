@@ -1,4 +1,7 @@
 #pragma once
+#include "../CSC8503Common/StateMachine.h"
+#include "../CSC8503Common/State.h"
+#include "../CSC8503Common/StateTransition.h"
 #include "../../Common/Window.h"
 #include "GameTechRenderer.h"
 #include "../CSC8503Common/PhysicsSystem.h"
@@ -20,6 +23,8 @@ namespace NCL {
 		protected:
 			void InitialiseAssets();
 
+			void InitStateMachine();
+
 			void InitCamera();
 			void UpdateKeys();
 
@@ -39,11 +44,11 @@ namespace NCL {
 			void SimpleGJKTest();
 			bool SelectObject();
 			void MoveSelectedObject();
-			void MoveGoose();
+			
 			void DebugObjectMovement();
 			void LockedObjectMovement();
 			void LockedCameraMovement();
-			void CalculatePathCharacter();
+			
 			int applesinworld = 0;
 			int oldvalspawn = 0;
 			Window* Screen;
@@ -53,6 +58,8 @@ namespace NCL {
 			GameObject* AddFloorToWorld(const Vector3& position, int nodesize);
 			GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
 			GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name);
+
+			GameObject* AddChestToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name);
 			
 			//IT'S HAPPENING
 			GooseGameObject* AddGooseToWorld(const Vector3& position);
@@ -68,6 +75,8 @@ namespace NCL {
 			PhysicsSystem* physics;
 			GameWorld* world;
 
+			StateMachine* statemachine;
+
 			bool useGravity;
 			bool inSelectionMode;
 
@@ -79,6 +88,7 @@ namespace NCL {
 			OGLMesh* sphereMesh = nullptr;
 			OGLTexture* basicTex = nullptr;
 			OGLTexture* groundTex = nullptr;
+			OGLTexture* ChestTex = nullptr;
 			OGLTexture* KeeperTex = nullptr;
 			OGLTexture* GrounTex = nullptr;
 			OGLShader* basicShader = nullptr;

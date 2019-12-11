@@ -25,9 +25,9 @@ void StateMachine::AddTransition(StateTransition* t) {
 	allTransitions.insert(std::make_pair(t->GetSourceState(), t));
 }
 
-void StateMachine::Update() {
+void StateMachine::Update(float dt) {
 	if (activeState) {
-		activeState->Update();
+		activeState->Update(dt);
 
 		std::pair<TransitionIterator, TransitionIterator> range = allTransitions.equal_range(activeState);
 
