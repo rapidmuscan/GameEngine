@@ -11,13 +11,13 @@ namespace NCL {
 		class EnemyGameObject : public GameObject
 		{
 		public:
-			EnemyGameObject(string name = "", int _Layer = 0, GameObject * _target = nullptr, GameObject* _target2 = nullptr);
+			EnemyGameObject(string name = "", int _Layer = 0, GameObject * _target = nullptr, GameObject* _target2 = nullptr, GameObject* _target3 = nullptr);
 
 			int tuched = 0;
 			float buff = 0;
 			GameObject* target = nullptr;
 			GameObject* target2 = nullptr;
-
+			GameObject* target3 = nullptr;
 
 			static void FolowingEnemy(float dt, void* data);
 			static void OtherThing(float dt, void* data);
@@ -25,7 +25,16 @@ namespace NCL {
 			void folowingwithalg(float dt, GameObject* target, int speed);
 
 
-
+			void seteasy() {
+				GameObject* a = target3;
+				target3 = target2;
+				target2 = a;
+			}
+			void sethard() {
+				GameObject* a = target2;
+				target2 = target3;
+				target3 = a;
+			}
 
 			void reset() {
 				tuched = 0;

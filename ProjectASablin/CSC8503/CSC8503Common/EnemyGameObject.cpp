@@ -1,9 +1,10 @@
 #include "EnemyGameObject.h"
 
-NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer, GameObject* _target, GameObject* _target2) : grid{ "TestGrid1.txt" }
+NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer, GameObject* _target, GameObject* _target2, GameObject* _target3) : grid{ "TestGrid1.txt" }
 {
 	target = _target;
 	target2 = _target2;
+	target3 = _target3;
 	name = Objectname;
 	Layer = _Layer;
 }

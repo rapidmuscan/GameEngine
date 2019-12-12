@@ -38,7 +38,7 @@ namespace NCL {
 					
 				}
 
-				if (otherObject->GetName() == "tower") {
+				if (otherObject->GetName() == "chest") {
 					if (ApplesEaten > 0)
 					{
 						ApplesEaten--;

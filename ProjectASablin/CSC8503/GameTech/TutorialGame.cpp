@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <math.h>
+#include<time.h>
 
 
 using namespace NCL;
@@ -53,6 +54,7 @@ void TutorialGame::InitialiseAssets() {
 	GrounTex = (OGLTexture*)TextureLoader::LoadAPITexture("GrounTex.png");
 	groundTex = (OGLTexture*)TextureLoader::LoadAPITexture("ground.png");
 	BackMenu = (OGLTexture*)TextureLoader::LoadAPITexture("BackMenu.jpg");
+	EasyButton = (OGLTexture*)TextureLoader::LoadAPITexture("EasyBut.jpg");
 	startbut = (OGLTexture*)TextureLoader::LoadAPITexture("startbut.png");
 	ChestTex = (OGLTexture*)TextureLoader::LoadAPITexture("gold-texture.jpg");
 	basicShader = new OGLShader("GameTechVert.glsl", "GameTechFrag.glsl");
@@ -96,10 +98,30 @@ void TutorialGame::UpdateGame(float dt) {
 	
 	
 	
-
+	
 	
 	UpdateKeys();
+	game(dt);
+	
 
+	AppleInitworldobjects("TestGrid1.txt");
+
+	SelectObject();
+	MoveSelectedObject();
+	
+
+	world->UpdateWorld(dt);
+	renderer->Update(dt);
+	physics->Update(dt);
+	Debug::FlushRenderables();
+	renderer->Render();
+
+	
+
+	
+}
+
+void TutorialGame::game(float dt) {
 	if (MainMenu) {
 		Window::GetWindow()->ShowOSPointer(true);
 		Window::GetWindow()->LockMouseToWindow(false);
@@ -107,6 +129,29 @@ void TutorialGame::UpdateGame(float dt) {
 		world->GetMainCamera()->SetPosition(Menu->GetTransform().GetWorldPosition() + Vector3(0, 0, 10));
 		world->GetMainCamera()->SetPitch(0);
 		world->GetMainCamera()->SetYaw(0);
+
+
+		if (Window::GetMouse()->ButtonDown(NCL::MouseButtons::LEFT)) {
+			Ray ray = CollisionDetection::BuildRayFromMouse(*world->GetMainCamera());
+			RayCollision closestCollision;
+			if (world->Raycast(ray, closestCollision, true)) {
+				selectionObject = (GameObject*)closestCollision.node;
+				if (selectionObject->GetName() == "start") {
+					Window::GetWindow()->ShowOSPointer(true);
+					Window::GetWindow()->LockMouseToWindow(false);
+					MainMenu = false;
+					play = true;
+				}
+				if (selectionObject->GetName() == "easy") {
+					man->seteasy();
+					Window::GetWindow()->ShowOSPointer(true);
+					Window::GetWindow()->LockMouseToWindow(false);
+					MainMenu = false;
+					play = true;
+				}
+			}
+
+		}
 	}
 
 	if (play) {
@@ -127,41 +172,8 @@ void TutorialGame::UpdateGame(float dt) {
 			goose->cleenbag();
 		}
 	}
-	
-	
 
-	AppleInitworldobjects("TestGrid1.txt");
-
-
-	SelectObject();
-	MoveSelectedObject();
-	
-
-	world->UpdateWorld(dt);
-	renderer->Update(dt);
-	physics->Update(dt);
-	Debug::FlushRenderables();
-	renderer->Render();
-
-	
-
-	if (Window::GetMouse()->ButtonDown(NCL::MouseButtons::LEFT)) {
-		Ray ray = CollisionDetection::BuildRayFromMouse(*world->GetMainCamera());
-		RayCollision closestCollision;
-		if (world->Raycast(ray, closestCollision, true)) {
-			selectionObject = (GameObject*)closestCollision.node;
-			if (selectionObject->GetName() == "start") {
-				Window::GetWindow()->ShowOSPointer(true);
-				Window::GetWindow()->LockMouseToWindow(false);
-				MainMenu = false;
-				play = true;
-			}
-		}
-		
-	}
 }
-
-
 
 void TutorialGame::UpdateKeys() {
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::F1)) {
@@ -294,14 +306,9 @@ void TutorialGame::DebugObjectMovement() {
 		}
 	}
 }
-/*
 
-Every frame, this code will let you perform a raycast, to see if there's an object
-underneath the cursor, and if so 'select it' into a pointer, so that it can be
-manipulated later. Pressing Q will let you toggle between this behaviour and instead
-letting you move the camera around.
 
-*/
+
 bool TutorialGame::SelectObject() {
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::Q)) {
 
@@ -318,6 +325,10 @@ bool TutorialGame::SelectObject() {
 	}
 	if (inSelectionMode) {
 		renderer->DrawString("Press Q to change to camera mode!", Vector2(10, 0));
+		string text = "Object pos:\n (" + std::to_string(Dvector.x) + "," + std::to_string(Dvector.y) + "," + std::to_string(Dvector.z)
+			+ ")";
+		renderer->DrawString(text, Vector2(0, 40));
+		renderer->DrawString("Layer: (" + std::to_string(DLayer) + ") Name : (" + DName + ")", Vector2(0, 20));
 
 		if (Window::GetMouse()->ButtonDown(NCL::MouseButtons::LEFT)) {
 			if (selectionObject) {	//set colour to deselected;
@@ -330,6 +341,11 @@ bool TutorialGame::SelectObject() {
 			if (world->Raycast(ray, closestCollision, true)) {
 				selectionObject = (GameObject*)closestCollision.node;
 				selectionObject->GetRenderObject()->SetColour(Vector4(0, 1, 0, 1));
+				DName = selectionObject->GetName();
+				DLayer = selectionObject->GetLayer();
+				Dvector = selectionObject->GetTransform().GetWorldPosition();
+
+
 				return true;
 			}
 			else {
@@ -362,8 +378,8 @@ line - after the third, they'll be able to twist under torque aswell.
 
 
 void TutorialGame::MoveSelectedObject() {
-	renderer->DrawString(" Click Force :" + std::to_string(forceMagnitude),
-		Vector2(10, 20)); // Draw debug text at 10 ,20
+	//renderer->DrawString(" Click Force :" + std::to_string(forceMagnitude),
+		//Vector2(10, 20)); // Draw debug text at 10 ,20
 	forceMagnitude += Window::GetMouse()->GetWheelMovement() * 100.0f;
 
 	if (!selectionObject) {
@@ -399,22 +415,13 @@ void TutorialGame::InitWorld() {
 	world->ClearAndErase();
 	physics->Clear();
 
-	//InitMixedGridWorld(10, 10, 3.5f, 3.5f);
-
-
 	generateworld("TestGrid1.txt");
 	Initworldobjects("TestGrid1.txt");
-	
-	
-
-
-	AddCharacterToWorld(Vector3(45, 2, 35));
-
-	
 }
 
 void NCL::CSC8503::TutorialGame::generateworld(const std::string& filename)
 {
+	std::srand(time(0));
 	std::ofstream myfile(Assets::DATADIR + filename);
 	int hight = 20;
 	int width = 20;
@@ -513,7 +520,7 @@ GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius
 }
 
 GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name = "",int Layer) {
-	GameObject* cube = new GameObject(name, Layer);
+	GameObject* cube = new GameObject("worldcube", Layer);
 
 	AABBVolume* volume = new AABBVolume(dimensions);
 
@@ -544,6 +551,26 @@ GameObject* TutorialGame::AddStartButToWorld(const Vector3& position, Vector3 di
 	cube->GetTransform().SetWorldScale(dimensions);
 
 	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, startbut, basicShader));
+	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
+
+	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
+	cube->GetPhysicsObject()->InitCubeInertia();
+
+	world->AddGameObject(cube);
+
+	return cube;
+}
+GameObject* TutorialGame::AddEasyButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer = 0) {
+	GameObject* cube = new GameObject("easy", Layer);
+
+	AABBVolume* volume = new AABBVolume(dimensions);
+
+	cube->SetBoundingVolume((CollisionVolume*)volume);
+
+	cube->GetTransform().SetWorldPosition(position);
+	cube->GetTransform().SetWorldScale(dimensions);
+
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, EasyButton, basicShader));
 	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
 
 	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
@@ -626,7 +653,7 @@ EnemyGameObject* TutorialGame::AddParkKeeperToWorld(const Vector3& position)
 	float meshSize = 4.0f;
 	float inverseMass = 0.5f;
 
-	EnemyGameObject* keeper = new EnemyGameObject("",0,goose, Chest);
+	EnemyGameObject* keeper = new EnemyGameObject("",0,goose, Chest,easytarg);
 
 	AABBVolume* volume = new AABBVolume(Vector3(0.3, 0.9f, 0.3) * meshSize);
 	keeper->SetBoundingVolume((CollisionVolume*)volume);
@@ -739,8 +766,8 @@ void TutorialGame::Initworldobjects(const std::string& filename) {
 	}
 
 	MenuInit();
-
-	AddChestToWorld(Vector3(nodeSize + ((nodeSize) / 4), nodeSize / 4, nodeSize + ((nodeSize) / 4)), Vector3((nodeSize / 2)/3, (nodeSize / 2)/3, (nodeSize / 2)/3), 0.0f, "tower");
+	easytarg = AddCubeToWorld(Vector3(1 * nodeSize, nodeSize * 102, (gridHeight - 2) * nodeSize), Vector3(nodeSize / 2, nodeSize / 2, nodeSize / 2), 0.0f);
+	AddChestToWorld(Vector3(nodeSize + ((nodeSize) / 4), nodeSize / 4, nodeSize + ((nodeSize) / 4)), Vector3((nodeSize / 2)/3, (nodeSize / 2)/3, (nodeSize / 2)/3), 0.0f, "chest");
 	Chest = AddCubeToWorld(Vector3(nodeSize,nodeSize*102,nodeSize*2), Vector3(nodeSize / 2, nodeSize / 2, nodeSize / 2), 0.0f);
 	Vector3 position = Vector3(nodeSize, nodeSize, nodeSize);
 	Apple = AddAppleToWorld(Vector3(0, -19999, 0));
@@ -758,13 +785,12 @@ void TutorialGame::MenuInit() {
 
 	AddBackMenuToWorld(a + Vector3(0, 0, -5), Vector3(12, 7, 0), 0.0f,"",4);
 
-	AddStartButToWorld(a + Vector3(0, -2, 0), Vector3(2, 1, 0), 0.0f);//start
-	AddCubeToWorld(a + Vector3(-4, -2, 0), Vector3(1, 0.5, 0), 0.0f);//easy
-	AddCubeToWorld(a + Vector3(4, -2, 0), Vector3(1, 0.5, 0), 0.0f);//hard
+	AddStartButToWorld(a + Vector3(0, -2, 0), Vector3(2, 1, 0), 0.0f);
+	AddEasyButToWorld(a + Vector3(-4, -2, 0), Vector3(1, 0.5, 0), 0.0f);
 }
 
 void TutorialGame::AppleInitworldobjects(const std::string& filename) {
-
+	std::srand(time(0));
 	std::ifstream infile(Assets::DATADIR + filename);
 	int nodeSize;
 	int gridWidth;
@@ -788,7 +814,7 @@ void TutorialGame::AppleInitworldobjects(const std::string& filename) {
 			char type = 0;
 			infile >> type;
 
-			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 12) && (x != 1) &&(y != 1) ){
+			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 7) && (x != 1) &&(y != 1) ){
 				if (curnum == rundnumber) {
 					Apple = AddAppleToWorld(position);
 					applesinworld++;

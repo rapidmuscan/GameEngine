@@ -20,6 +20,9 @@ namespace NCL {
 
 			virtual void UpdateGame(float dt);
 
+			void game(float dt);
+
+
 		protected:
 			void InitialiseAssets();
 
@@ -63,6 +66,8 @@ namespace NCL {
 
 			GameObject* AddStartButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
 
+			GameObject* AddEasyButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
+
 
 			GameObject* AddBackMenuToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name, int Layer);
 
@@ -79,6 +84,7 @@ namespace NCL {
 			AppleGameObject* Apple;
 			GameObject* Chest = nullptr;
 			GameObject* Menu = nullptr;
+			GameObject* easytarg = nullptr;
 
 			bool MainMenu = true;
 			bool play = false;
@@ -102,6 +108,7 @@ namespace NCL {
 			OGLTexture* basicTex = nullptr;
 			OGLTexture* groundTex = nullptr;
 			OGLTexture* BackMenu = nullptr;
+			OGLTexture* EasyButton = nullptr;
 			OGLTexture* startbut = nullptr;
 			OGLTexture* ChestTex = nullptr;
 			OGLTexture* KeeperTex = nullptr;
@@ -115,6 +122,9 @@ namespace NCL {
 			OGLMesh* charA = nullptr;
 			OGLMesh* charB = nullptr;
 
+			int DLayer = 0;
+			string DName = "";
+			Vector3 Dvector = Vector3(0, 0, 0);
 
 			int firsframecheck = 0;
 			vector<Vector3> testNodes;

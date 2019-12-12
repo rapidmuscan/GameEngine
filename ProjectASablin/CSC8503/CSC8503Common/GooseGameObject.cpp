@@ -15,8 +15,8 @@ void NCL::CSC8503::GooseGameObject::GooseIndecators(Window* w)
 	float width = w->GetScreenSize().x;
 	float hight = w->GetScreenSize().y;
 	int step = 25;
-	string text2 = "Apples at spawn: " + std::to_string(Applesatspawn);
-	Debug::Print(text2, Vector2(0, hight - step), Vector4(1, 0, 0, 1));
+	string text2 = "Applemoney: " + std::to_string(Applesatspawn);
+	Debug::Print(text2, Vector2(0, hight - step * 7), Vector4(1, 0, 0, 1));
 	string text3 = "In your Bag:" + std::to_string(ApplesEaten);
 	Debug::Print(text3, Vector2(0, hight - step * 2), Vector4(0, 0, 0, 1));
 	string text4 = "Your current lvl: " + std::to_string(lvl);
@@ -25,8 +25,10 @@ void NCL::CSC8503::GooseGameObject::GooseIndecators(Window* w)
 	Debug::Print(text5, Vector2(0, hight - step * 4), Vector4(0, 0, 0, 1));
 	string text6 = "Sprint lvl:" + std::to_string(sprintlvl);
 	Debug::Print(text6, Vector2(0, hight - step * 5), Vector4(0, 0, 0, 1));
-	string text7 = "Total Amount of Apples taken:" + std::to_string(totalApp);
-	Debug::Print(text7, Vector2(0, hight - step * 6), Vector4(0, 0, 0, 1));
+	string text10 = "Total Amount of Apples taken:" + std::to_string(totalApp);
+	Debug::Print(text10, Vector2(0, hight - step), Vector4(0, 0, 0, 1));
+	string text11 = "Music you heard:" + std::to_string(musicheck);
+	Debug::Print(text11, Vector2(0, hight - step * 6), Vector4(0, 0, 0, 1));
 
 
 	if (Applesatspawn >= (3.0f + (3.0f * _lvl / 10.0f))) {
@@ -82,11 +84,11 @@ void GooseGameObject::Music() {
 		musicheck++;
 	}
 	if (totalApp == a * 9 && musicheck != 9) {
-		PlaySound(TEXT("2.WAV"), NULL, SND_FILENAME | SND_ASYNC);
+		PlaySound(TEXT("9.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 		musicheck++;
 	}
 	if (totalApp == a * 10 && musicheck != 10) {
-		PlaySound(TEXT("2.WAV"), NULL, SND_FILENAME | SND_ASYNC);
+		PlaySound(TEXT("10.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 		musicheck++;
 	}
 	if (totalApp == a * 11 && musicheck != 11) {
