@@ -14,6 +14,11 @@ namespace NCL {
 			int sprintlvl = 0;
 			bool touch = false;
 			float Applesatspawn = 0;
+			int totalApp = 0;
+			int musicheck = 0;
+
+
+
 			void cleenbag() { ApplesEaten = 0; }
 			void lvlup() {
 				Applesatspawn = Applesatspawn - (3.0f + (3.0f * _lvl / 10.0f));
@@ -30,12 +35,14 @@ namespace NCL {
 				//std::cout << "OnCollisionBegin event occured!\n";
 				if (otherObject->GetName() == "apple") {
 					ApplesEaten++;
+					
 				}
 
 				if (otherObject->GetName() == "tower") {
 					if (ApplesEaten > 0)
 					{
 						ApplesEaten--;
+						totalApp++;
 						Applesatspawn++;
 						touch = true;
 					}
@@ -45,6 +52,7 @@ namespace NCL {
 			virtual void OnCollisionEnd(GameObject* otherObject) {
 				
 			}
+			void Music();
 		};
 	}
 };

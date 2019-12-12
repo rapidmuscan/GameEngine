@@ -1,40 +1,42 @@
 #include "EnemyGameObject.h"
 
-NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer, GameObject* _target) : grid{ "TestGrid1.txt" }
+NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer, GameObject* _target, GameObject* _target2) : grid{ "TestGrid1.txt" }
 {
 	target = _target;
+	target2 = _target2;
 	name = Objectname;
 	Layer = _Layer;
 }
 
-void EnemyGameObject::EnemyLogic(float dt)
-{
-	if (Layer == target->GetLayer()) {
-		buff = target->GetLvl();
-		int maxrange = 40;
-		float Difinx = std::abs(target->GetTransform().GetWorldPosition().x - GetTransform().GetWorldPosition().x);
-		float Difinz = std::abs(target->GetTransform().GetWorldPosition().z - GetTransform().GetWorldPosition().z);
-		if ((Difinx > 4 || Difinz > 4) && (Difinx < (maxrange + (maxrange * buff / 100)) && Difinz < (maxrange + (maxrange * buff / 100))))
-		{
-			folowingwithalg(dt, target, 80 + (80 * buff / 100));
-		}
-		else if ((Difinx < 4 && Difinz < 4))
-		{
-			Vector3 direction = (target->GetTransform().GetWorldPosition() - GetTransform().GetWorldPosition()).Normalised();
-			GetPhysicsObject()->AddForce(direction * 90);
-		}
-	}
-}
 
 void EnemyGameObject::FolowingEnemy(float dt, void* data)
 {
 	EnemyGameObject* object = static_cast<EnemyGameObject*>(data);
-	object->buff = object->target->GetLvl();
-	object->folowingwithalg(dt, object->target, 80 + (80 * object->buff / 100));
+
+	if (object->Layer == object->target->GetLayer()) {
+		object->buff = object->target->GetLvl();
+		int maxrange = 40;
+		float Difinx = std::abs(object->target->GetTransform().GetWorldPosition().x - object->GetTransform().GetWorldPosition().x);
+		float Difinz = std::abs(object->target->GetTransform().GetWorldPosition().z - object->GetTransform().GetWorldPosition().z);
+		float dist = sqrt((Difinz * Difinz) + (Difinx * Difinx));
+		if ((dist > 4) && (dist < (maxrange + (maxrange * object->buff / 100))))
+		{
+			object->folowingwithalg(dt, object->target, 80 + (80 * object->buff / 100));
+		}
+		else if (dist <= 4)
+		{
+			Vector3 direction = (object->target->GetTransform().GetWorldPosition() - object->GetTransform().GetWorldPosition()).Normalised();
+			object->GetPhysicsObject()->AddForce(direction * 90);
+		}
+	}
 }
 
 void EnemyGameObject::OtherThing(float dt, void* data)
 {
+	EnemyGameObject* object = static_cast<EnemyGameObject*>(data);
+
+	object->folowingwithalg(dt, object->target2, 40);
+	
 }
 
 void EnemyGameObject::folowingwithalg(float dt, GameObject* target,int speed )
@@ -79,3 +81,4 @@ void EnemyGameObject::folowingwithalg(float dt, GameObject* target,int speed )
 	Debug::DrawLine(startPos, startPos + Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
 	Debug::DrawLine(targetposition, targetposition + Vector3(0, 100, 0), Vector4(1, 1, 0, 1));
 }
+

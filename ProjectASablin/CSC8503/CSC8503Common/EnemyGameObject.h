@@ -11,14 +11,13 @@ namespace NCL {
 		class EnemyGameObject : public GameObject
 		{
 		public:
-			EnemyGameObject(string name = "", int _Layer = 0, GameObject * _target = nullptr);
+			EnemyGameObject(string name = "", int _Layer = 0, GameObject * _target = nullptr, GameObject* _target2 = nullptr);
 
 			int tuched = 0;
 			float buff = 0;
 			GameObject* target = nullptr;
+			GameObject* target2 = nullptr;
 
-
-			void EnemyLogic(float dt);
 
 			static void FolowingEnemy(float dt, void* data);
 			static void OtherThing(float dt, void* data);
@@ -65,8 +64,12 @@ namespace NCL {
 
 			virtual bool CanTransition() const override
 			{
-				//enemy->
-				return true;
+				enemy->buff = enemy->target->GetLvl();
+				int maxrange = 40;
+				float Difinx = std::abs(enemy->target->GetTransform().GetWorldPosition().x - enemy->GetTransform().GetWorldPosition().x);
+				float Difinz = std::abs(enemy->target->GetTransform().GetWorldPosition().z - enemy->GetTransform().GetWorldPosition().z);
+				float dist = sqrt((Difinz * Difinz) + (Difinx * Difinx));
+				return  (dist < (maxrange + (maxrange * enemy->buff / 100)));
 			}
 
 		protected:
@@ -84,8 +87,12 @@ namespace NCL {
 
 			virtual bool CanTransition() const override
 			{
-				//enemy->
-				return false;
+				enemy->buff = enemy->target->GetLvl();
+				int maxrange = 40;
+				float Difinx = std::abs(enemy->target->GetTransform().GetWorldPosition().x - enemy->GetTransform().GetWorldPosition().x);
+				float Difinz = std::abs(enemy->target->GetTransform().GetWorldPosition().z - enemy->GetTransform().GetWorldPosition().z);
+				float dist = sqrt((Difinz * Difinz) + (Difinx * Difinx));
+				return (dist > (maxrange + (maxrange * enemy->buff / 100)));
 			}
 
 		protected:

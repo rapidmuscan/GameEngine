@@ -29,6 +29,8 @@ namespace NCL {
 			void UpdateKeys();
 
 			void Initworldobjects(const std::string& filename);
+			void MenuInit();
+			
 			void AppleInitworldobjects(const std::string& filename);
 			void InitWorld();
 			void generateworld(const std::string& filename);
@@ -57,7 +59,12 @@ namespace NCL {
 			
 			GameObject* AddFloorToWorld(const Vector3& position, int nodesize);
 			GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
-			GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name);
+			GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name, int Layer= 0);
+
+			GameObject* AddStartButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
+
+
+			GameObject* AddBackMenuToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name, int Layer);
 
 			GameObject* AddChestToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name);
 			
@@ -70,6 +77,12 @@ namespace NCL {
 			EnemyGameObject* man = nullptr;
 			
 			AppleGameObject* Apple;
+			GameObject* Chest = nullptr;
+			GameObject* Menu = nullptr;
+
+			bool MainMenu = true;
+			bool play = false;
+			bool gameover = false;
 
 			GameTechRenderer* renderer;
 			PhysicsSystem* physics;
@@ -88,6 +101,8 @@ namespace NCL {
 			OGLMesh* sphereMesh = nullptr;
 			OGLTexture* basicTex = nullptr;
 			OGLTexture* groundTex = nullptr;
+			OGLTexture* BackMenu = nullptr;
+			OGLTexture* startbut = nullptr;
 			OGLTexture* ChestTex = nullptr;
 			OGLTexture* KeeperTex = nullptr;
 			OGLTexture* GrounTex = nullptr;
