@@ -9,7 +9,7 @@ namespace NCL {
 
 		class NetworkedGame : public TutorialGame, public PacketReceiver {
 		public:
-			NetworkedGame();
+			NetworkedGame(GameServer* thisServer, GameClient* thisClient, float timeToNextPacket, int packetsToSnapshot);
 			~NetworkedGame();
 
 			void StartAsServer();

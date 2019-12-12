@@ -142,6 +142,7 @@
     <ClInclude Include="BoundingVolume.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="GooseGameObject.h" />
+    <ClInclude Include="HaightScoreReciever.h" />
     <ClInclude Include="NavigationGrid.h" />
     <ClInclude Include="NavigationMap.h" />
     <ClInclude Include="NavigationMesh.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="GooseGameObject.cpp" />
+    <ClCompile Include="HaightScoreReciever.cpp" />
     <ClCompile Include="NavigationGrid.cpp" />
     <ClCompile Include="NavigationMesh.cpp" />
     <ClCompile Include="NavigationPath.cpp" />

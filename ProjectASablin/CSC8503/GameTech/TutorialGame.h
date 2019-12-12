@@ -1,8 +1,11 @@
 #pragma once
 #include "../CSC8503Common/StateMachine.h"
 #include "../CSC8503Common/State.h"
+#include "../CSC8503Common/HaightScoreReciever.h"
 #include "../CSC8503Common/StateTransition.h"
 #include "../../Common/Window.h"
+#include "../CSC8503Common/GameServer.h"
+#include "../CSC8503Common/GameClient.h"
 #include "GameTechRenderer.h"
 #include "../CSC8503Common/PhysicsSystem.h"
 #include "../CSC8503Common/AppleGameObject.h"
@@ -20,14 +23,17 @@ namespace NCL {
 
 			virtual void UpdateGame(float dt);
 
+			void HightScores();
+
 			void game(float dt);
 
-
+			
 		protected:
+			void InitServer();
 			void InitialiseAssets();
 
 			void InitStateMachine();
-
+			void serverTick();
 			void InitCamera();
 			void UpdateKeys();
 
@@ -36,6 +42,8 @@ namespace NCL {
 			
 			void AppleInitworldobjects(const std::string& filename);
 			void InitWorld();
+			void SaveGame();
+			void LoadGame();
 			void generateworld(const std::string& filename);
 			/*
 			These are some of the world/object creation functions I created when testing the functionality
@@ -128,7 +136,9 @@ namespace NCL {
 
 			int firsframecheck = 0;
 			vector<Vector3> testNodes;
-
+			vector<int> scores;
+			vector<string> names;
+			vector<int> IndexScores;
 
 			//Coursework Additional functionality	
 			GameObject* lockedObject = nullptr;
@@ -136,6 +146,13 @@ namespace NCL {
 			void LockCameraToObject(GameObject* o) {
 				lockedObject = o;
 			}
+
+			float Totaltime = 0;
+			HaightScoreReciever*  serverReceiver;
+			HaightScoreReciever*  clientReceiver;
+			GameServer* server;
+			GameClient* client;
+
 		};
 	}
 }

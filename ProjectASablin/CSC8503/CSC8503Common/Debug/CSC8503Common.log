@@ -1,8 +1,3 @@
-﻿  GooseGameObject.cpp
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(109,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(116,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(122,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(128,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GooseGameObject.cpp(133,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  CSC8503Common.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\CSC8503Common.lib
+﻿  GameServer.cpp
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+  CSC8503Common.vcxproj -> C:\Users\b8057567\Documents\ASProject\ProjectASablin\Win32\Debug\CSC8503Common.lib

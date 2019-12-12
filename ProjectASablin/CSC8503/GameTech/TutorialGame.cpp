@@ -11,6 +11,8 @@
 #include <iostream>
 #include <math.h>
 #include<time.h>
+#include<sstream>
+#include <ostream>
 
 
 using namespace NCL;
@@ -29,9 +31,27 @@ TutorialGame::TutorialGame(Window* w) {
 	Screen = w;
 
 	Debug::SetRenderer(renderer);
-
+	
 
 	InitialiseAssets();
+
+	InitServer();
+}
+void TutorialGame::InitServer() {
+	NetworkBase::Initialise();
+
+	serverReceiver = new HaightScoreReciever("Server");
+	clientReceiver = new HaightScoreReciever("Client");
+
+	int port = NetworkBase::GetDefaultPort();
+
+	server = new GameServer(port, 1);
+	client = new GameClient();
+
+	server->RegisterPacketHandler(String_Message, serverReceiver);
+	client->RegisterPacketHandler(String_Message, clientReceiver);
+
+	bool canConnect = client->Connect(127, 0, 0, 1, port);
 }
 
 void TutorialGame::InitialiseAssets() {
@@ -80,6 +100,21 @@ void TutorialGame::InitStateMachine() {
 	statemachine->AddTransition(stateTransitionB);
 }
 
+void NCL::CSC8503::TutorialGame::serverTick()
+{
+	server->SendGlobalPacket(
+		StringPacket("Server says hello!"));
+
+	client->SendPacket(
+		StringPacket("Client says hello!"));
+
+	server->UpdateServer();
+	client->UpdateClient();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+}
+
 TutorialGame::~TutorialGame() {
 	delete cubeMesh;
 	delete sphereMesh;
@@ -97,7 +132,7 @@ TutorialGame::~TutorialGame() {
 void TutorialGame::UpdateGame(float dt) {
 	
 	
-	
+	serverTick();
 	
 	
 	UpdateKeys();
@@ -116,9 +151,72 @@ void TutorialGame::UpdateGame(float dt) {
 	Debug::FlushRenderables();
 	renderer->Render();
 
-	
+	HightScores();
 
 	
+}
+
+void TutorialGame::HightScores() {
+	std::ifstream myfile(Assets::DATADIR + "Hightscores.txt");
+	string line;
+
+	while (std::getline(myfile, line))
+	{
+		std::stringstream ss;
+		string temp;
+		int number;
+		ss << line;
+		while (!ss.eof())
+		{
+			ss >> temp;
+
+			if (std::stringstream(temp) >> number)
+				scores.push_back(number);
+			else
+				names.push_back(temp);
+
+			temp = "";
+		}
+
+	}
+	myfile.close();
+
+	vector<int> sortedscores = scores;
+	std::sort(sortedscores.begin(), sortedscores.end());
+	std::reverse(sortedscores.begin(), sortedscores.end());
+
+
+	for (int i = 0; i < sortedscores.size(); i++)
+	{
+		int j = 0;
+		while (true)
+		{
+			if (sortedscores[i] == scores[j]) {
+				IndexScores.push_back(j);
+				break;
+			}
+
+			j++;
+		}
+
+	}
+
+	std::ofstream outFile;
+	outFile.open(Assets::DATADIR + "Hightscores.txt", std::ofstream::trunc);
+
+	for (size_t i = 0; i < IndexScores.size(); i++)
+	{
+		string string = names[IndexScores[i]] + " " + std::to_string(scores[IndexScores[i]]) + "\n";
+		outFile << string;
+		renderer->DrawString("HaightScore", Vector2(400, 325));
+		renderer->DrawString(string, Vector2(400, 300 - (25 * i)));
+	}
+	outFile.close();
+
+	IndexScores.clear();
+	names.clear();
+	scores.clear();
+	sortedscores.clear();
 }
 
 void TutorialGame::game(float dt) {
@@ -137,15 +235,17 @@ void TutorialGame::game(float dt) {
 			if (world->Raycast(ray, closestCollision, true)) {
 				selectionObject = (GameObject*)closestCollision.node;
 				if (selectionObject->GetName() == "start") {
-					Window::GetWindow()->ShowOSPointer(true);
-					Window::GetWindow()->LockMouseToWindow(false);
 					MainMenu = false;
 					play = true;
 				}
 				if (selectionObject->GetName() == "easy") {
-					man->seteasy();
-					Window::GetWindow()->ShowOSPointer(true);
-					Window::GetWindow()->LockMouseToWindow(false);
+					man->seteasy();;
+					MainMenu = false;
+					play = true;
+				}
+				if (selectionObject->GetName() == "Load") {
+					LoadGame();
+					
 					MainMenu = false;
 					play = true;
 				}
@@ -155,6 +255,10 @@ void TutorialGame::game(float dt) {
 	}
 
 	if (play) {
+		Window::GetWindow()->ShowOSPointer(false);
+		Window::GetWindow()->LockMouseToWindow(true);
+		Totaltime += dt;
+		renderer->DrawString(std::to_string(Totaltime),Vector2(400,400));
 		world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 60, 40));
 		world->GetMainCamera()->SetPitch(-60);
 		world->GetMainCamera()->SetYaw(0);
@@ -171,6 +275,22 @@ void TutorialGame::game(float dt) {
 			man->reset();
 			goose->cleenbag();
 		}
+		if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::M)) {
+			
+			names.push_back("Alex");
+			scores.push_back(goose->totalApp);
+
+			SaveGame();
+
+			
+			play = false;
+			MainMenu = true;
+
+			world->GetMainCamera()->SetPosition(Menu->GetTransform().GetWorldPosition() + Vector3(0, 0, 10));
+			world->GetMainCamera()->SetPitch(0);
+			world->GetMainCamera()->SetYaw(0);
+		}
+
 	}
 
 }
@@ -419,6 +539,53 @@ void TutorialGame::InitWorld() {
 	Initworldobjects("TestGrid1.txt");
 }
 
+void TutorialGame::SaveGame()
+{
+	std::ofstream myfile(Assets::DATADIR + "SaveGame.txt");
+	myfile << goose->ApplesEaten;
+	myfile << "\n";
+	myfile << goose->_lvl;
+	myfile << "\n";
+	myfile << goose->jumplvl;
+	myfile << "\n";
+	myfile << goose->sprintlvl;
+	myfile << "\n";
+	myfile << goose->touch;
+	myfile << "\n";
+	myfile << goose->Applesatspawn;
+	myfile << "\n";
+	myfile << goose->totalApp;
+	myfile << "\n";
+	myfile << goose->musicheck;
+	myfile << "\n";
+	myfile << man->easy;
+	myfile.close();
+}
+void TutorialGame::LoadGame() {
+	std::ifstream infile(Assets::DATADIR + "SaveGame.txt");
+	int ApplesEaten;
+	float _lvl;
+	int jumplvl;
+	int sprintlvl;
+	bool touch;
+	float Applesatspawn;
+	int totalApp;
+	int musicheck;
+	bool easy;
+	infile >> ApplesEaten;
+	infile >> _lvl;
+	infile >> jumplvl;
+	infile >> sprintlvl;
+	infile >> touch;
+	infile >> Applesatspawn;
+	infile >> totalApp;
+	infile >> musicheck;
+	infile >> easy;
+	infile.close();
+	goose->loadfromfile(ApplesEaten,_lvl,jumplvl,sprintlvl,touch,Applesatspawn,totalApp,musicheck);
+	man->loadfromfile(easy);
+}
+
 void NCL::CSC8503::TutorialGame::generateworld(const std::string& filename)
 {
 	std::srand(time(0));
@@ -520,7 +687,7 @@ GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius
 }
 
 GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, string name = "",int Layer) {
-	GameObject* cube = new GameObject("worldcube", Layer);
+	GameObject* cube = new GameObject(name, Layer);
 
 	AABBVolume* volume = new AABBVolume(dimensions);
 
@@ -787,11 +954,11 @@ void TutorialGame::MenuInit() {
 
 	AddStartButToWorld(a + Vector3(0, -2, 0), Vector3(2, 1, 0), 0.0f);
 	AddEasyButToWorld(a + Vector3(-4, -2, 0), Vector3(1, 0.5, 0), 0.0f);
+	AddCubeToWorld(a + Vector3(4, -2, 0), Vector3(1, 0.5, 0), 0.0f,"Load");
 }
 
 void TutorialGame::AppleInitworldobjects(const std::string& filename) {
-	std::srand(time(0));
-	std::ifstream infile(Assets::DATADIR + filename);
+		std::ifstream infile(Assets::DATADIR + filename);
 	int nodeSize;
 	int gridWidth;
 	int gridHeight;

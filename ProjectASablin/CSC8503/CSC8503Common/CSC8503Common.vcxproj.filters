@@ -132,6 +132,9 @@
     <ClInclude Include="EnemyGameObject.h">
       <Filter>Other</Filter>
     </ClInclude>
+    <ClInclude Include="HaightScoreReciever.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionDetection.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="EnemyGameObject.cpp">
       <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="HaightScoreReciever.cpp">
+      <Filter>Networking</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

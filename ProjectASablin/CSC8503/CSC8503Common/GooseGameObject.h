@@ -17,7 +17,28 @@ namespace NCL {
 			int totalApp = 0;
 			int musicheck = 0;
 
+			void wipeall() {
+				ApplesEaten = 0;
+				_lvl = 0;
+				jumplvl = 0;
+				sprintlvl = 0;
+				touch = false;
+				Applesatspawn = 0;
+				totalApp = 0;
+				musicheck = 0;
+			}
 
+			void loadfromfile(int _ApplesEaten, float lvl_, int _jumplvl,int _sprintlvl,bool _touch,float _Applesatspawn, int _totalApp, int _musicheck)
+			{
+				ApplesEaten = _ApplesEaten;
+				_lvl = lvl_;
+				jumplvl = _jumplvl;
+				sprintlvl = _sprintlvl;
+				touch = _touch;
+				Applesatspawn = _Applesatspawn;
+				totalApp = _totalApp;
+				musicheck = _musicheck;
+			}
 
 			void cleenbag() { ApplesEaten = 0; }
 			void lvlup() {
@@ -25,18 +46,14 @@ namespace NCL {
 				_lvl++;
 				lvl = _lvl;
 			}
-			
+			void Music();
 			void GooseIndecators(Window* w);
 			void goosebehave(Window* w);
 			void SetBack() {
 				touch = false;
 			}
 			virtual void OnCollisionBegin(GameObject* otherObject) {
-				//std::cout << "OnCollisionBegin event occured!\n";
-				if (otherObject->GetName() == "apple") {
-					ApplesEaten++;
-					
-				}
+				if (otherObject->GetName() == "apple") ApplesEaten++;
 
 				if (otherObject->GetName() == "chest") {
 					if (ApplesEaten > 0)
@@ -50,9 +67,9 @@ namespace NCL {
 			}
 
 			virtual void OnCollisionEnd(GameObject* otherObject) {
-				
+
 			}
-			void Music();
+			
 		};
 	}
 };

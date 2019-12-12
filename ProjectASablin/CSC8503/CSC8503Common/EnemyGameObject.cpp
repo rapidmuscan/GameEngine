@@ -5,6 +5,9 @@ NCL::CSC8503::EnemyGameObject::EnemyGameObject(string Objectname, int _Layer, Ga
 	target = _target;
 	target2 = _target2;
 	target3 = _target3;
+	Reftarget = _target;
+	Reftarget2 = _target2;
+	Reftarget3 = _target3;
 	name = Objectname;
 	Layer = _Layer;
 }
@@ -50,12 +53,12 @@ void EnemyGameObject::folowingwithalg(float dt, GameObject* target,int speed )
 
 
 		Vector3 endPos = target->GetTransform().GetWorldPosition();
-		std::cout << "StartPos " << startPos << std::endl;
-		std::cout << "endPos " << endPos << std::endl;
+		//std::cout << "StartPos " << startPos << std::endl;
+		//std::cout << "endPos " << endPos << std::endl;
 		outPath.Clear();
 		bool found = grid.FindPath(startPos, endPos, outPath);
 		if (!found) {
-			std::cout << "Path not found" << std::endl;
+			//std::cout << "Path not found" << std::endl;
 		}
 		else {
 			outPath.DebugDraw();
