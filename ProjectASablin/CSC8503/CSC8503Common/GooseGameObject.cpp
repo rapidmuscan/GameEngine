@@ -25,7 +25,7 @@ void NCL::CSC8503::GooseGameObject::GooseIndecators(Window* w)
 	Debug::Print(text5, Vector2(0, hight - step * 4), Vector4(0, 0, 0, 1));
 	string text6 = "Sprint lvl:" + std::to_string(sprintlvl);
 	Debug::Print(text6, Vector2(0, hight - step * 5), Vector4(0, 0, 0, 1));
-	string text10 = "Total Amount of Apples taken:" + std::to_string(totalApp);
+	string text10 = "Total Amount of Apples: " + std::to_string(totalApp);
 	Debug::Print(text10, Vector2(0, hight - step), Vector4(0, 0, 0, 1));
 	string text11 = "Music you heard:" + std::to_string(musicheck)+"/11";
 	Debug::Print(text11, Vector2(0, hight - step * 6), Vector4(0, 0, 0, 1));

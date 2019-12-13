@@ -22,6 +22,7 @@ namespace NCL {
 			GameObject* target2 = nullptr;
 			GameObject* target3 = nullptr;
 			bool easy = false;
+			bool touch = false;
 
 			static void FolowingEnemy(float dt, void* data);
 			static void OtherThing(float dt, void* data);
@@ -51,7 +52,9 @@ namespace NCL {
 				target2 = target3;
 				target3 = a;
 			}
-
+			void SetBack() {
+				touch = false;
+			}
 			void reset() {
 				tuched = 0;
 			}
@@ -64,7 +67,7 @@ namespace NCL {
 			virtual void OnCollisionBegin(GameObject* otherObject) {
 				if (otherObject->GetName() == "goose") {
 					PlaySound(TEXT("lole.WAV"), NULL, SND_FILENAME | SND_ASYNC);
-
+					touch = true;
 					tuched++;
 				}
 

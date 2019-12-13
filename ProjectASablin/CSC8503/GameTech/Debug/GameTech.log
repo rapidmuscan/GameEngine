@@ -1,57 +1,9 @@
-﻿  TutorialGame.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp: note: see previous definition of '_WINSOCKAPI_'
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(92,40): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(115,40): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(190,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(213,49): warning C4244:  'argument': conversion from 'size_t' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(592,17): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(611,23): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(615,24): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(652,61): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(652,38): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(826,60): warning C4305:  'argument': truncation from 'double' to 'float'
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(862,60): warning C4305:  'argument': truncation from 'double' to 'float'
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(893,60): warning C4305:  'argument': truncation from 'double' to 'float'
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(923,61): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(923,54): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(923,33): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(930,76): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(930,62): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(930,48): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,83): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,59): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,38): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,141): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,127): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(937,113): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,78): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,64): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,35): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,157): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,139): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(938,121): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,63): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,50): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,33): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,113): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,99): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(939,85): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(940,49): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(940,39): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(940,29): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(942,64): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(942,57): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(942,36): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(943,81): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(943,60): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(943,39): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(945,83): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(945,45): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(946,21): warning C4244:  '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(951,85): warning C4305:  'argument': truncation from 'double' to 'float'
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(981,61): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(981,54): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\TutorialGame.cpp(981,33): warning C4244:  'argument': conversion from 'int' to 'float', possible loss of data
-  GameTech.vcxproj -> C:\Users\b8057567\Documents\ASProject\ProjectASablin\Win32\Debug\GameTech.exe
+﻿  Main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: '_WINSOCKAPI_': macro redefinition
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp : message : see previous definition of '_WINSOCKAPI_'
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(95,40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(118,40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp(96,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp(99,46): warning C4305: 'argument': truncation from 'double' to 'float'
+  GameTech.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\GameTech.exe

@@ -53,7 +53,10 @@ namespace NCL {
 				touch = false;
 			}
 			virtual void OnCollisionBegin(GameObject* otherObject) {
-				if (otherObject->GetName() == "apple") ApplesEaten++;
+				if (otherObject->GetName() == "apple") {
+					ApplesEaten++;
+					PlaySound(TEXT("eda.WAV"), NULL, SND_FILENAME | SND_ASYNC);
+				}
 
 				if (otherObject->GetName() == "chest") {
 					if (ApplesEaten > 0)

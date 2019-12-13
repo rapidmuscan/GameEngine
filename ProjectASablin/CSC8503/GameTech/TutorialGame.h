@@ -74,6 +74,10 @@ namespace NCL {
 
 			GameObject* AddStartButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
 
+			GameObject* AddLoadButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
+
+			GameObject* AddScoreButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
+
 			GameObject* AddEasyButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer);
 
 
@@ -97,6 +101,7 @@ namespace NCL {
 			bool MainMenu = true;
 			bool play = false;
 			bool gameover = false;
+			bool Uscore = false;
 
 			GameTechRenderer* renderer;
 			PhysicsSystem* physics;
@@ -114,9 +119,11 @@ namespace NCL {
 			OGLMesh* cubeMesh = nullptr;
 			OGLMesh* sphereMesh = nullptr;
 			OGLTexture* basicTex = nullptr;
+			OGLTexture* ScoreTex = nullptr;
 			OGLTexture* groundTex = nullptr;
 			OGLTexture* BackMenu = nullptr;
 			OGLTexture* EasyButton = nullptr;
+			OGLTexture* LoadTex = nullptr;
 			OGLTexture* startbut = nullptr;
 			OGLTexture* ChestTex = nullptr;
 			OGLTexture* KeeperTex = nullptr;

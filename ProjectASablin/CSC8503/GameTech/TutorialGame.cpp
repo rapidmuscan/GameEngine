@@ -23,22 +23,19 @@ TutorialGame::TutorialGame(Window* w) {
 	renderer = new GameTechRenderer(*world);
 	physics = new PhysicsSystem(*world);
 
-	
-
 	forceMagnitude = 10.0f;
 	useGravity = false;
 	inSelectionMode = false;
 	Screen = w;
 
-	Debug::SetRenderer(renderer);
-	
+	Debug::SetRenderer(renderer);	
 
 	InitialiseAssets();
 
 	InitServer();
 }
 void TutorialGame::InitServer() {
-	NetworkBase::Initialise();
+	/*NetworkBase::Initialise();
 
 	serverReceiver = new HaightScoreReciever("Server");
 	clientReceiver = new HaightScoreReciever("Client");
@@ -51,7 +48,7 @@ void TutorialGame::InitServer() {
 	server->RegisterPacketHandler(String_Message, serverReceiver);
 	client->RegisterPacketHandler(String_Message, clientReceiver);
 
-	bool canConnect = client->Connect(127, 0, 0, 1, port);
+	bool canConnect = client->Connect(127, 0, 0, 1, port);*/
 }
 
 void TutorialGame::InitialiseAssets() {
@@ -70,11 +67,13 @@ void TutorialGame::InitialiseAssets() {
 	loadFunc("Apple.msh", &appleMesh);
 
 	basicTex = (OGLTexture*)TextureLoader::LoadAPITexture("checkerboard.png");
+	ScoreTex = (OGLTexture*)TextureLoader::LoadAPITexture("ScoreTex.png");
 	KeeperTex = (OGLTexture*)TextureLoader::LoadAPITexture("EnemyTex.png");
 	GrounTex = (OGLTexture*)TextureLoader::LoadAPITexture("GrounTex.png");
 	groundTex = (OGLTexture*)TextureLoader::LoadAPITexture("ground.png");
 	BackMenu = (OGLTexture*)TextureLoader::LoadAPITexture("BackMenu.jpg");
 	EasyButton = (OGLTexture*)TextureLoader::LoadAPITexture("EasyBut.jpg");
+	LoadTex = (OGLTexture*)TextureLoader::LoadAPITexture("LoadTex.png");
 	startbut = (OGLTexture*)TextureLoader::LoadAPITexture("startbut.png");
 	ChestTex = (OGLTexture*)TextureLoader::LoadAPITexture("gold-texture.jpg");
 	basicShader = new OGLShader("GameTechVert.glsl", "GameTechFrag.glsl");
@@ -82,6 +81,7 @@ void TutorialGame::InitialiseAssets() {
 	InitCamera();
 	InitWorld();
 	InitStateMachine();
+	PlaySound(TEXT("MainMenu.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void TutorialGame::InitStateMachine() {
@@ -102,16 +102,18 @@ void TutorialGame::InitStateMachine() {
 
 void NCL::CSC8503::TutorialGame::serverTick()
 {
-	server->SendGlobalPacket(
-		StringPacket("Server says hello!"));
+	/*string message;
+	string holdingMessage;
+	std::ifstream myFile(Assets::DATADIR + "Hightscores.txt");
+	while (std::getline(myFile, holdingMessage)) {
+		message = message + " " + holdingMessage;
+	}
+	server->SendGlobalPacket(StringPacket(message));
 
-	client->SendPacket(
-		StringPacket("Client says hello!"));
+	client->SendPacket(StringPacket("client says hello"));
 
 	server->UpdateServer();
-	client->UpdateClient();
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	client->UpdateClient();*/
 
 }
 
@@ -208,8 +210,10 @@ void TutorialGame::HightScores() {
 	{
 		string string = names[IndexScores[i]] + " " + std::to_string(scores[IndexScores[i]]) + "\n";
 		outFile << string;
-		renderer->DrawString("HaightScore", Vector2(400, 325));
-		renderer->DrawString(string, Vector2(400, 300 - (25 * i)));
+		if (Uscore) {
+			renderer->DrawString("HaightScore", Vector2(900, 625));
+			renderer->DrawString(string, Vector2(900, 600 - (25 * i)));
+		}
 	}
 	outFile.close();
 
@@ -234,20 +238,34 @@ void TutorialGame::game(float dt) {
 			RayCollision closestCollision;
 			if (world->Raycast(ray, closestCollision, true)) {
 				selectionObject = (GameObject*)closestCollision.node;
+
 				if (selectionObject->GetName() == "start") {
+					PlaySound(NULL, 0, 0);
 					MainMenu = false;
 					play = true;
+					Uscore = false;
 				}
 				if (selectionObject->GetName() == "easy") {
-					man->seteasy();;
+					man->seteasy();
+					PlaySound(NULL, 0, 0);
 					MainMenu = false;
 					play = true;
+					Uscore = false;
 				}
 				if (selectionObject->GetName() == "Load") {
 					LoadGame();
+					PlaySound(NULL, 0, 0);
+					Uscore = false;
 					
 					MainMenu = false;
 					play = true;
+				}
+				if (selectionObject->GetName() == "Score") {
+					if (!Uscore)
+						Uscore = true;
+					
+						
+					
 				}
 			}
 
@@ -258,7 +276,7 @@ void TutorialGame::game(float dt) {
 		Window::GetWindow()->ShowOSPointer(false);
 		Window::GetWindow()->LockMouseToWindow(true);
 		Totaltime += dt;
-		renderer->DrawString(std::to_string(Totaltime),Vector2(400,400));
+		renderer->DrawString("Time sec: " + std::to_string((int)Totaltime),Vector2(880,655));
 		world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 60, 40));
 		world->GetMainCamera()->SetPitch(-60);
 		world->GetMainCamera()->SetYaw(0);
@@ -282,13 +300,37 @@ void TutorialGame::game(float dt) {
 
 			SaveGame();
 
-			
+			goose->wipeall();
+			man->wipeall();
+
+			play = false;
+			MainMenu = true;
+			Uscore = true;
+
+			world->GetMainCamera()->SetPosition(Menu->GetTransform().GetWorldPosition() + Vector3(0, 0, 10));
+			world->GetMainCamera()->SetPitch(0);
+			world->GetMainCamera()->SetYaw(0);
+		}
+
+		if (goose->ApplesEaten == 0 && man->touch == true) {
+			PlaySound(TEXT("GameOver.WAV"), NULL, SND_FILENAME | SND_ASYNC);
+			names.push_back("Alex");
+			scores.push_back(goose->totalApp);
+
+			goose->wipeall();
+			man->wipeall();
+			Uscore = true;
 			play = false;
 			MainMenu = true;
 
 			world->GetMainCamera()->SetPosition(Menu->GetTransform().GetWorldPosition() + Vector3(0, 0, 10));
 			world->GetMainCamera()->SetPitch(0);
 			world->GetMainCamera()->SetYaw(0);
+		}
+
+		if (man->touch == true)
+		{
+			man->SetBack();
 		}
 
 	}
@@ -727,6 +769,46 @@ GameObject* TutorialGame::AddStartButToWorld(const Vector3& position, Vector3 di
 
 	return cube;
 }
+GameObject* TutorialGame::AddLoadButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer = 0) {
+	GameObject* cube = new GameObject("Load", Layer);
+
+	AABBVolume* volume = new AABBVolume(dimensions);
+
+	cube->SetBoundingVolume((CollisionVolume*)volume);
+
+	cube->GetTransform().SetWorldPosition(position);
+	cube->GetTransform().SetWorldScale(dimensions);
+
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, LoadTex, basicShader));
+	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
+
+	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
+	cube->GetPhysicsObject()->InitCubeInertia();
+
+	world->AddGameObject(cube);
+
+	return cube;
+}
+GameObject* TutorialGame::AddScoreButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer = 0) {
+	GameObject* cube = new GameObject("Score", Layer);
+
+	AABBVolume* volume = new AABBVolume(dimensions);
+
+	cube->SetBoundingVolume((CollisionVolume*)volume);
+
+	cube->GetTransform().SetWorldPosition(position);
+	cube->GetTransform().SetWorldScale(dimensions);
+
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, ScoreTex, basicShader));
+	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
+
+	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
+	cube->GetPhysicsObject()->InitCubeInertia();
+
+	world->AddGameObject(cube);
+
+	return cube;
+}
 GameObject* TutorialGame::AddEasyButToWorld(const Vector3& position, Vector3 dimensions, float inverseMass, int Layer = 0) {
 	GameObject* cube = new GameObject("easy", Layer);
 
@@ -954,7 +1036,8 @@ void TutorialGame::MenuInit() {
 
 	AddStartButToWorld(a + Vector3(0, -2, 0), Vector3(2, 1, 0), 0.0f);
 	AddEasyButToWorld(a + Vector3(-4, -2, 0), Vector3(1, 0.5, 0), 0.0f);
-	AddCubeToWorld(a + Vector3(4, -2, 0), Vector3(1, 0.5, 0), 0.0f,"Load");
+	AddLoadButToWorld(a + Vector3(4, -1.5, 0), Vector3(1.25, 0.30, 0), 0.0f);
+	AddScoreButToWorld(a + Vector3(4, -3, 0), Vector3(1, 0.5, 0), 0.0f);
 }
 
 void TutorialGame::AppleInitworldobjects(const std::string& filename) {
