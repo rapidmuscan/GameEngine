@@ -1,9 +1,8 @@
-﻿  Main.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: '_WINSOCKAPI_': macro redefinition
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp : message : see previous definition of '_WINSOCKAPI_'
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(95,40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(118,40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp(96,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alsab\Documents\GameEngine\ProjectASablin\CSC8503\GameTech\Main.cpp(99,46): warning C4305: 'argument': truncation from 'double' to 'float'
-  GameTech.vcxproj -> C:\Users\alsab\Documents\GameEngine\ProjectASablin\Win32\Debug\GameTech.exe
+﻿  NetworkedGame.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005:  '_WINSOCKAPI_': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winsock2.h(17,1): warning C4005: C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\GameTech\NetworkedGame.cpp: note: see previous definition of '_WINSOCKAPI_'
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\GameObject.h(66,12): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\HaightScoreReciever.h(47,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(95,40): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\b8057567\Documents\ASProject\ProjectASablin\CSC8503\CSC8503Common\EnemyGameObject.h(118,40): warning C4244:  '=': conversion from 'int' to 'float', possible loss of data
+  GameTech.vcxproj -> C:\Users\b8057567\Documents\ASProject\ProjectASablin\Win32\Debug\GameTech.exe

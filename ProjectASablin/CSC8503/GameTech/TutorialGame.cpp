@@ -35,7 +35,7 @@ TutorialGame::TutorialGame(Window* w) {
 	InitServer();
 }
 void TutorialGame::InitServer() {
-	/*NetworkBase::Initialise();
+	NetworkBase::Initialise();
 
 	serverReceiver = new HaightScoreReciever("Server");
 	clientReceiver = new HaightScoreReciever("Client");
@@ -48,7 +48,7 @@ void TutorialGame::InitServer() {
 	server->RegisterPacketHandler(String_Message, serverReceiver);
 	client->RegisterPacketHandler(String_Message, clientReceiver);
 
-	bool canConnect = client->Connect(127, 0, 0, 1, port);*/
+	bool canConnect = client->Connect(127, 0, 0, 1, port);
 }
 
 void TutorialGame::InitialiseAssets() {
@@ -102,7 +102,7 @@ void TutorialGame::InitStateMachine() {
 
 void NCL::CSC8503::TutorialGame::serverTick()
 {
-	/*string message;
+	string message;
 	string holdingMessage;
 	std::ifstream myFile(Assets::DATADIR + "Hightscores.txt");
 	while (std::getline(myFile, holdingMessage)) {
@@ -113,7 +113,7 @@ void NCL::CSC8503::TutorialGame::serverTick()
 	client->SendPacket(StringPacket("client says hello"));
 
 	server->UpdateServer();
-	client->UpdateClient();*/
+	client->UpdateClient();
 
 }
 
@@ -244,6 +244,8 @@ void TutorialGame::game(float dt) {
 					MainMenu = false;
 					play = true;
 					Uscore = false;
+					Window::GetWindow()->ShowOSPointer(false);
+					Window::GetWindow()->LockMouseToWindow(true);
 				}
 				if (selectionObject->GetName() == "easy") {
 					man->seteasy();
@@ -251,6 +253,8 @@ void TutorialGame::game(float dt) {
 					MainMenu = false;
 					play = true;
 					Uscore = false;
+					Window::GetWindow()->ShowOSPointer(false);
+					Window::GetWindow()->LockMouseToWindow(true);
 				}
 				if (selectionObject->GetName() == "Load") {
 					LoadGame();
@@ -259,6 +263,8 @@ void TutorialGame::game(float dt) {
 					
 					MainMenu = false;
 					play = true;
+					Window::GetWindow()->ShowOSPointer(false);
+					Window::GetWindow()->LockMouseToWindow(true);
 				}
 				if (selectionObject->GetName() == "Score") {
 					if (!Uscore)
@@ -271,10 +277,11 @@ void TutorialGame::game(float dt) {
 
 		}
 	}
-
+	if (!play) {
+		Totaltime = 0;
+	}
 	if (play) {
-		Window::GetWindow()->ShowOSPointer(false);
-		Window::GetWindow()->LockMouseToWindow(true);
+		
 		Totaltime += dt;
 		renderer->DrawString("Time sec: " + std::to_string((int)Totaltime),Vector2(880,655));
 		world->GetMainCamera()->SetPosition(goose->GetTransform().GetWorldPosition() + Vector3(0, 60, 40));
@@ -312,7 +319,7 @@ void TutorialGame::game(float dt) {
 			world->GetMainCamera()->SetYaw(0);
 		}
 
-		if (goose->ApplesEaten == 0 && man->touch == true) {
+		if ((goose->ApplesEaten == 0 && man->touch == true)||((int)Totaltime == 300)) {
 			PlaySound(TEXT("GameOver.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 			names.push_back("Alex");
 			scores.push_back(goose->totalApp);

@@ -23,44 +23,33 @@ public:
 		this->name = name;
 	}
 
-	//void ReceivePacket(int type, GamePacket* payload, int source) {
-	//	/*if (type == String_Message) {
-	//		StringPacket* realPacket = (StringPacket*)payload;
-	//		std::string msg = realPacket->GetStringFromData();
-	//		std::cout << msg << std::endl;
-	//		
-	//		vector<int> scores;
-	//		vector<string> names;
-
-	//		std::ofstream myfile;
-
-	//		myfile.open(NCL::Assets::DATADIR + "Hightscores.txt");
-
-	//		std::stringstream ss;
-	//		ss << msg;
-	//		string temp;
-	//		int number;
-	//		while (!ss.eof()) {
-	//			ss >> temp;
-
-	//			if (std::stringstream(temp) >> number)
-	//				scores.push_back(number);
-	//			else
-	//				names.push_back(temp);
-
-
-
-	//			temp = "";
-	//		}
-
-
-
-	//		for (int i = 0; i < scores.size(); ++i) {
-	//			string output = names[i] + " " + std::to_string(scores[i]) + "\n";
-	//			myfile << output;
-	//		}
-	//	}*/
-	//}
+	void ReceivePacket(int type, GamePacket* payload, int source) {
+		if (type == String_Message) {
+			StringPacket* realPacket = (StringPacket*)payload;
+			std::string msg = realPacket->GetStringFromData();
+			std::cout << msg << std::endl;
+			vector<int> scores;
+			vector<string> names;
+			std::ofstream myfile;
+			myfile.open(NCL::Assets::DATADIR + "Hightscores.txt");
+			std::stringstream ss;
+			ss << msg;
+			string temp;
+			int number;
+			while (!ss.eof()) {
+				ss >> temp;
+				if (std::stringstream(temp) >> number)
+					scores.push_back(number);
+				else
+					names.push_back(temp);
+				temp = "";
+			}
+			for (int i = 0; i < scores.size(); ++i) {
+				string output = names[i] + " " + std::to_string(scores[i]) + "\n";
+				myfile << output;
+			}
+		}
+	}
 protected:
 	std::string name;
 };

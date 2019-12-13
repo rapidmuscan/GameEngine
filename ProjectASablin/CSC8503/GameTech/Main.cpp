@@ -103,7 +103,7 @@ void DisplayPathfinding() {
 
 
 int main() {
-	Window* w = Window::CreateGameWindow("CSC8503 Game technology!", 1280, 720,true);
+	Window* w = Window::CreateGameWindow("CSC8503 Game technology!", 1280, 720);
 
 	if (!w->HasInitialised()) {
 		return -1;
