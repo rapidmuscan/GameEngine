@@ -278,7 +278,7 @@ void TutorialGame::game(float dt) {
 		}
 	}
 	if (!play) {
-		Totaltime = 0;
+		Totaltime = 180;
 	}
 	if (play) {
 		
@@ -289,6 +289,14 @@ void TutorialGame::game(float dt) {
 		world->GetMainCamera()->SetYaw(0);
 		statemachine->Update(dt);
 		goose->goosebehave(Screen);
+
+
+		if ((goose->musicheck == 12) && Totaltime > 180) {
+			PlaySound(TEXT("MainMenu.WAV"), NULL, SND_FILENAME | SND_ASYNC);
+			Totaltime = 0;
+		}
+
+
 
 		if (firsframecheck < 1) {
 			useGravity = true;
@@ -319,7 +327,7 @@ void TutorialGame::game(float dt) {
 			world->GetMainCamera()->SetYaw(0);
 		}
 
-		if ((goose->ApplesEaten == 0 && man->touch == true)||((int)Totaltime == 300)) {
+		if (goose->ApplesEaten == 0 && man->touch == true) {
 			PlaySound(TEXT("GameOver.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 			names.push_back("Alex");
 			scores.push_back(goose->totalApp);
@@ -1071,7 +1079,7 @@ void TutorialGame::AppleInitworldobjects(const std::string& filename) {
 			char type = 0;
 			infile >> type;
 
-			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 7) && (x != 1) &&(y != 1) ){
+			if ((type == '.' && (goose->ApplesEaten + applesinworld) < 12) && (x != 1) &&(y != 1) ){
 				if (curnum == rundnumber) {
 					Apple = AddAppleToWorld(position);
 					applesinworld++;

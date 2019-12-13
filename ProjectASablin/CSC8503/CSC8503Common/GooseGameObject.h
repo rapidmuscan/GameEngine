@@ -13,7 +13,7 @@ namespace NCL {
 			int jumplvl = 0;
 			int sprintlvl = 0;
 			bool touch = false;
-			float Applesatspawn = 0;
+			float Applesatspawn = 15;
 			int totalApp = 0;
 			int musicheck = 0;
 
@@ -42,7 +42,7 @@ namespace NCL {
 
 			void cleenbag() { ApplesEaten = 0; }
 			void lvlup() {
-				Applesatspawn = Applesatspawn - (3.0f + (3.0f * _lvl / 10.0f));
+				Applesatspawn = Applesatspawn - (3.0f + (3.0f * _lvl / 5.0f));
 				_lvl++;
 				lvl = _lvl;
 			}
@@ -52,6 +52,7 @@ namespace NCL {
 			void SetBack() {
 				touch = false;
 			}
+			
 			virtual void OnCollisionBegin(GameObject* otherObject) {
 				if (otherObject->GetName() == "apple") {
 					ApplesEaten++;

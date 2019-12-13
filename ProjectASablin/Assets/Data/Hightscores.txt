@@ -1,12 +1,1 @@
-Alex 22
-Alex 5
-Alex 4
-Alex 4
-Alex 2
-Alex 2
-Alex 1
-Alex 1
-Alex 0
-Alex 0
-Alex 0
-Alex 0
+Alex 20

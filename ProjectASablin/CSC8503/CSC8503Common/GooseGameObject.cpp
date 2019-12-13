@@ -10,7 +10,7 @@ NCL::CSC8503::GooseGameObject::GooseGameObject(string objectName, int _Layer)
 
 void NCL::CSC8503::GooseGameObject::GooseIndecators(Window* w)
 {
-	
+
 
 	float width = w->GetScreenSize().x;
 	float hight = w->GetScreenSize().y;
@@ -27,11 +27,11 @@ void NCL::CSC8503::GooseGameObject::GooseIndecators(Window* w)
 	Debug::Print(text6, Vector2(0, hight - step * 5), Vector4(0, 0, 0, 1));
 	string text10 = "Total Amount of Apples: " + std::to_string(totalApp);
 	Debug::Print(text10, Vector2(0, hight - step), Vector4(0, 0, 0, 1));
-	string text11 = "Music you heard:" + std::to_string(musicheck)+"/11";
+	string text11 = "Music you heard:" + std::to_string(musicheck) + "/11";
 	Debug::Print(text11, Vector2(0, hight - step * 6), Vector4(0, 0, 0, 1));
 
 
-	if (Applesatspawn >= (3.0f + (3.0f * _lvl / 10.0f))) {
+	if (Applesatspawn >= (3.0f + (3.0f * _lvl / 5.0f))) {
 		string text7 = "Lvlup is avalable!!!:";
 		Debug::Print(text7, Vector2(0, hight - step * 15), Vector4(0, 0, 0, 1));
 		string text8 = "(P) for jump upgrade";
@@ -95,6 +95,10 @@ void GooseGameObject::Music() {
 		PlaySound(TEXT("11.WAV"), NULL, SND_FILENAME | SND_ASYNC);
 		musicheck++;
 	}
+	if (totalApp == a * 12 && musicheck != 12) {
+		
+		musicheck++;
+	}
 
 }
 void NCL::CSC8503::GooseGameObject::goosebehave(Window* w)
@@ -104,28 +108,29 @@ void NCL::CSC8503::GooseGameObject::goosebehave(Window* w)
 	Vector3 p_w_r = GetTransform().GetLocalOrientation().ToEuler();
 
 	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::LEFT)) {
+
 		Vector3 p_w_r = GetTransform().GetLocalOrientation().ToEuler();
 		GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, -90, p_w_r.z));
-		GetPhysicsObject()->AddForce(Vector3(-40 + (40 * (sprintlvl / 6)), 0, 0));
+		GetPhysicsObject()->AddForce(Vector3(-40 - (40 * (sprintlvl / 3)), 0, 0));
 	}
 
 	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::RIGHT)) {
 
 		Vector3 p_w_r = GetTransform().GetLocalOrientation().ToEuler();
 		GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 90, p_w_r.z));
-		GetPhysicsObject()->AddForce(Vector3(40 + (40 * (sprintlvl / 6)), 0, 0));
+		GetPhysicsObject()->AddForce(Vector3(40 + (40 * (sprintlvl / 3)), 0, 0));
 	}
 	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP)) {
 
 		Vector3 p_w_r = GetTransform().GetLocalOrientation().ToEuler();
 		GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 180, p_w_r.z));
-		GetPhysicsObject()->AddForce(-Vector3(0, 0, 40 + (40 * (sprintlvl / 6))));
+		GetPhysicsObject()->AddForce(-Vector3(0, 0, 40 + (40 * (sprintlvl / 3))));
 	}
 
 	if (Window::GetKeyboard()->KeyDown(KeyboardKeys::DOWN)) {
 		Vector3 p_w_r = GetTransform().GetLocalOrientation().ToEuler();
 		GetTransform().SetLocalOrientation(Quaternion::EulerAnglesToQuaternion(p_w_r.x, 0, p_w_r.z));
-		GetPhysicsObject()->AddForce(Vector3(0, 0, 40 + (40 * (sprintlvl / 6))));
+		GetPhysicsObject()->AddForce(Vector3(0, 0, 40 + (40 * (sprintlvl / 3))));
 	}
 	if (GetTransform().GetWorldPosition().y < 2) {
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::SPACE))
